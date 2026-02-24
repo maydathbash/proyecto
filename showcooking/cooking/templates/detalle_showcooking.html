@@ -1,0 +1,101 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .hero {
+      background-image: url("{{ showcooking.imagen.url }}");
+      background-size: cover;
+      background-position: center;
+      height: 420px;
+      position: relative;
+      margin-top: -2vh;
+    }
+
+    .recipe-card {
+      position: relative;
+      margin-top: -120px;
+      z-index: 2;
+    }
+
+    .badge-soft {
+      background-color: #f3f3f3;
+      color: #555;
+      font-weight: 500;
+    }
+    
+  </style>
+     <!-- HERO IMAGE -->
+  <div class="hero ">
+  </div>
+
+  <!-- CONTENT -->
+  <div class="container recipe-card">
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4">
+
+        <!-- TITLE -->
+        <h2 class="fw-bold mb-1">
+          {{showcooking.titulo}}
+        </h2>
+        <p class="text-muted mb-2">
+          {{showcooking.descripcion}}
+        </p>
+
+        <!-- RATING -->
+        <div class="d-flex align-items-center mb-3">
+          <div class="text-warning me-2">
+            <small class="text-muted">Valoración media: {{ cooking.avg_rating|floatformat:1 }} ⭐ ({{ cooking.num_valoraciones }} valoraciones)</small>
+          </div>
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="d-flex gap-2 mb-4">
+          <button class="btn btn-dark">
+            Ahorra hasta 70€
+          </button>
+          <button class="btn btn-outline-secondary">
+            <i class="bi bi-share"></i> Compartir
+          </button>
+        </div>
+
+        <!-- STATS -->
+        <div class="d-flex flex-wrap gap-4 text-muted mb-3">
+          <div><strong>Dificultad:</strong> {{showcooking.dificultad}}</div>
+        </div>
+        <div class="d-flex gap-2">
+            <div>
+                <strong>Autor:</strong>
+                {{ chef.id_chef.username }}
+            </div>
+        </div>
+
+        <!-- TAGS -->
+        <div class="d-flex gap-2">
+          <span class="badge badge-soft">{{showcooking.categoria}}</span>
+        </div>
+        <div class="">
+            <h2>Descripcion</h2>
+            {% if showccoking.descripcion != None %}
+              <p>{{ showccoking.descripcion  }}</p>
+            {% else %}
+              <p> Esta es la Descripcion base </p>
+            {% endif %}
+            {% if showcooking.url_youtube != None %}
+              <h2>Video</h2>
+              <iframe src="{{showcooking.url_youtube}}" frameborder="0"></iframe>
+            {% endif %}
+          <h2>Recetas</h2>
+          <ul>
+            {% for receta in recetas %}
+              <li>{{receta.titulo}}</li>
+            {% endfor%}
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}

@@ -1,0 +1,171 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+
+{% block content %}
+  <div class="paddingy tres-columnas-main">
+                <div class="uno-gr">
+                    <div class="container my-5">
+                    <div class="noticias-header">
+                        <h2 class="m-0 fs-4 fw-light">Últimas Noticias</h2>
+                        <div class="nav-buttons">
+                            <button type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <button type="button" data-bs-target="#newsCarousel" data-bs-slide="next">
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="row">
+                                    {% for cooking in mejores_showcookings %}
+                                    <div class="col-md-4 d-none d-md-block">
+                                      <a href="{% url 'detalle_showcooking' cooking.id %}">
+                                        <div class="news-card">
+                                            <div class="img-container"><img src="{{ cooking.imagen.url }}"></div>
+                                            <a href="#" class="news-title">{{ cooking.titulo }}</a>
+                                            <p class="news-meta">{{ cooking.descripcion|truncatewords:20 }}</p>
+                                        </div>
+                                        </a>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <!--No funciona, falta tratamiento en caso de que no incluya -->
+                            {% if mejores_showcookings2 %}
+                            <div class="carousel-item">
+                                <div class="row">
+                                    {% for cooking in mejores_showcookings2 %}
+                                        <div class="col-md-4 d-none d-md-block">
+                                            <a href="{% url 'detalle_showcooking' cooking.id %}">
+                                                <div class="news-card">
+                                                    <div class="img-container">
+                                                        <img src="{{ cooking.imagen.url }}">
+                                                    </div>
+                                                    <span class="news-title">{{ cooking.titulo }}</span>
+                                                    <p class="news-meta">
+                                                        {{ cooking.descripcion|truncatewords:20 }}
+                                                    </p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="dos-gr border-end border-2 border-secondary"></div>
+                <div class="tres-gr p-3">
+                  {% if not user.is_authenticated %}
+                   <div class="login-container">
+                    <h2 class="login-title">Iniciar Sesión</h2>
+                    
+                   <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    
+                    {# Campo de Usuario #}
+                    <div class="form-group">
+                        <label class="form-label-custom" for="{{ form.username.id_for_label }}">
+                            Usuario
+                        </label>
+                        {{ form.username }}
+                    </div>
+                    
+                    {# Campo de Contraseña #}
+                    <div class="form-group">
+                        <label class="form-label-custom" for="{{ form.password.id_for_label }}">
+                            Contraseña
+                        </label>
+                        {{ form.password }}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3">Entrar</button>
+                </form>
+
+                    <div class="login-footer">
+                        ¿No estás registrado? <a href="{% url 'registro_usuario' %}">Crear cuenta</a>
+                    </div>
+                </div>
+                {% else %}
+                <div class="login-container">
+                    <h2 class="login-title">{{ user.username}}</h2>
+                    <hr>
+                    {% if user.es_admin %}
+                      <ul>
+                        <li><a class="" href="/admin/">Admin</a></li>
+                        <li></li>
+                      
+                      {% else %}
+                        <p>hola</p>
+                      {% endif %}
+                      <li><hr class=""></li>
+                            <li><a class="" href="{% url 'cerrar_sesion' %}">Cerrar sesion</a></li>
+                      </ul>
+                </div>
+                {% endif %}
+                </div>
+            </div>
+            <div class="paddingy grid-dos-columnas pt-lg-5">
+                <div class="uno-gr estilo-sh-reciente fondo-gris">
+                    <div class="p-2 estilo-sh-reciente fondo-naranja">
+                        <h4>Showcookings recientes</h4>
+                    </div>
+                    <ul class="estilo-lista">
+                        {% for cooking in show %}
+                            <li>
+                                <h5>
+                                <a href="{% url 'detalle_showcooking' cooking.id %}">{{cooking.titulo}}</a>
+                                </h5>
+                                <p>
+                                    {{cooking.fecha_creacion}}
+                                </p>
+                            </li>
+                        {% endfor %}
+                      </ul>
+                </div>
+                <div class="dos-gr estilo-sh-reciente fondo-gris">
+                    <div class="p-2 estilo-sh-reciente fondo-gris-oscuro">
+                        <h4>recetas famosas</h4>
+                    </div>
+                    <div class="container my-5">
+                    <div id="carouselExampleCaptions" class="carousel slide shadow-lg" data-bs-ride="carousel">
+                        
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"></button>
+                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"></button>
+                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"></button>
+                        </div>
+
+                        <div class="carousel-inner rounded-4">
+                        {% for receta in mejores_recetas %}
+                            <div class="carousel-item {% if forloop.first %}active {% endif %}" data-bs-interval="4000">
+                                <img src="{{receta.imagen.url}}" class="d-block w-100" alt="Receta 1">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>{{receta.titulo}}</h5>
+                                    <p>{{receta.descripcion}}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        </div>
+
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Anterior</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Siguiente</span>
+                        </button>
+                    </div>
+                </div>
+                </div>
+            </div>
+{% endblock content %}

@@ -1,0 +1,4 @@
+1. hacer mas profesional el index y la pagina en si
+2. cambiar a mariadb
+3. cambiar la busqueda a una pagina aparte para evitar la tonteria que tiene
+4. crear una pagina usuario

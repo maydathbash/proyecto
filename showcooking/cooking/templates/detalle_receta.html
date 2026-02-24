@@ -1,0 +1,88 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .hero {
+      background-image: url("{{ '/media/imagenes/1200_900.jpg'}}");
+      background-size: cover;
+      background-position: center;
+      height: 420px;
+      position: relative;
+    }
+
+    .recipe-card {
+      position: relative;
+      margin-top: -120px;
+      z-index: 2;
+    }
+
+    .badge-soft {
+      background-color: #f3f3f3;
+      color: #555;
+      font-weight: 500;
+    }
+    
+  </style>
+     <!-- HERO IMAGE -->
+  <div class="hero ">
+  </div>
+
+  <!-- CONTENT -->
+  <div class="container recipe-card">
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4">
+
+        <!-- TITLE -->
+        <h2 class="fw-bold mb-1">
+          Baos de carne picada de cerdo con encurtidos
+        </h2>
+        <p class="text-muted mb-2">
+          con mayonesa de sriracha y cacahuetes
+        </p>
+
+        <!-- RATING -->
+        <div class="d-flex align-items-center mb-3">
+          <div class="text-warning me-2">
+            ★★★★☆
+          </div>
+          <small class="text-muted">4.5 (63)</small>
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="d-flex gap-2 mb-4">
+          <button class="btn btn-dark">
+            Ahorra hasta 70€
+          </button>
+          <button class="btn btn-outline-secondary">
+            <i class="bi bi-share"></i> Compartir
+          </button>
+        </div>
+
+        <!-- STATS -->
+        <div class="d-flex flex-wrap gap-4 text-muted mb-3">
+          <div><strong>Calorías:</strong> 968 kcal</div>
+          <div><strong>Proteínas:</strong> 39.1g</div>
+          <div><strong>Dificultad:</strong> Fácil</div>
+        </div>
+
+        <!-- TAGS -->
+        <div class="d-flex gap-2">
+          <span class="badge badge-soft">Picante</span>
+          <span class="badge badge-soft">Una sartén</span>
+        </div>
+        <div class="">
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit fugit est nulla, expedita aperiam quia possimus rerum necessitatibus labore dolore officia illum temporibus animi ex sequi iure dolor pariatur. Quam!</p>
+            <p>Vero culpa ducimus soluta dolorem laudantium delectus debitis hic fugit animi quam! Rem, asperiores! Tenetur vitae nesciunt assumenda at odit magnam, earum unde autem aliquam ea omnis dignissimos rem. Ipsam!</p>
+            <p>Ea quidem placeat similique, sed enim dignissimos recusandae illo ratione ad quas voluptatem voluptatibus dolores laboriosam excepturi eligendi cupiditate dolor est eos vitae deserunt molestias nisi culpa blanditiis. Voluptatibus, ipsum!</p>
+            <p>Nisi voluptatibus quaerat unde rem tenetur mollitia dicta veniam ad, est sit, minus veritatis vitae. Error pariatur repellat magnam est autem hic. Accusantium natus impedit doloribus est reiciendis ducimus eaque.</p>
+            <p>Ipsum cumque sint, quo esse cupiditate aspernatur repudiandae est praesentium vitae quidem, tempora expedita ut doloribus quisquam. Accusantium voluptatem quidem officiis odio rerum maiores repudiandae fugit necessitatibus, similique repellendus eligendi?</p>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}

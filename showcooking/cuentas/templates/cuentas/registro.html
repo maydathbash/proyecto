@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Iniciar sesión {% endblock %}
+
+{% block content %}
+
+<div class="p-4">
+    <h1>Crear cuenta</h1>
+    {% if form.errors %}
+            <div class="alert alert-danger">
+                Introduce datos válidos para crear la cuenta.
+            </div>
+            {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Crear cuenta</button>
+    </form>
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,383 @@
+body{
+    display: grid;
+    grid-template-areas: 
+    "hd hd"
+    "mn mn"
+    "ft ft";
+    gap: 20px;
+    margin: 0;
+}
+header{
+    grid-area: hd;
+}
+
+main{
+    grid-area: mn;
+}
+footer{
+    grid-area: ft;
+}
+
+
+
+/*especificas */
+.hd-2{
+    padding: 2vh;
+
+}
+.imagen-nav{
+    vertical-align: middle;
+    max-width: 100%;
+    height: 12vh;
+    box-sizing: border-box;
+    padding: 2vh;
+}
+.a-blancos{
+    text-align: center;
+    gap: 4;
+}
+.a-blancos a{
+    color: #FFFFFF;
+    padding: 0.5vh 0.5vh 0.5vh 0.5vh;
+    font-weight: bold;
+    display: inline-block;  
+    transition: color 0.3s;
+    margin-left: 2vh;
+}
+.a-blancos a:hover{
+    color: #E86B1C ;
+    border-radius: 10%;
+    background-color:#FFFFFF ;
+}
+.estilo-lista{
+    list-style-type: none;
+}
+.estilo-lista li h5{
+    color: #E86B1C;
+    font-weight: bold;
+}
+.estilo-lista li p{
+    font-weight: 100;
+    border-bottom: #555 solid 0.2vh;
+    margin-right: 50%;
+}
+
+.estilo-sh-reciente{
+    border-radius: 3%;
+
+}
+
+
+/*cosas colores */
+.fondo-naranja{
+    background-color: #E86B1C ;
+}
+.fondo-gris{
+    background-color: #F8F9FB ;
+}
+.fondo-gris-oscuro{
+    background-color: #9A9AA8 ;
+}
+
+/*padding*/
+.paddingy{
+    padding-left: 15vw;
+    padding-right: 15vw;
+}
+
+
+/* grid */
+.grid-dos-columnas{
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+    gap: 10vh;
+}
+.grid-tres-columnas{
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+.grid-4-columnas{
+    display: grid;
+    grid-template-columns: repeat(4,auto);
+}
+.uno-gr{
+    grid-column: 1;
+}
+.dos-gr{
+    grid-column: 2;
+}
+.tres-gr{
+    grid-column: 3;
+}
+.especifico-gr{
+    grid-column: 20;
+}
+.tres-columnas-main{
+    display: grid;
+    grid-template-columns: 4fr 0.5fr 2fr;
+    gap: 2vh;
+}
+
+/*grid especifico*/
+footer{
+    grid-template-areas: 
+    "c"
+    "edu"
+    "pic";
+    gap: 2vh;
+    font-weight: bold;
+}
+.c{grid-area: c;}
+.edu{grid-area:edu;}
+.pic{grid-area:pic;}
+/*aprovecho aqui */
+.pic img{
+    width: 200px;
+}
+.especifica{
+    width: 150px;
+}
+
+/* flexbox */
+.horizontal{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5vh;
+}
+
+
+/*para enlaces */
+a{
+    text-decoration: none;
+    
+}
+/*animaciones*/
+@keyframes crecer {
+  from {
+    transform: scale(1); /* Tamaño original */
+  }
+  to {
+    transform: scale(1.1); /* 1.5 veces más grande */
+  }
+}
+
+
+
+
+
+/* =====================
+   RESPONSIVE
+===================== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+    body{
+        grid-template-areas: 
+        "hd hd"
+        "mn as"
+        "ft ft";
+    }
+
+    .grid-tres-columnas{
+        grid-template-columns: auto auto;
+    }
+
+    .grid-4-columnas{
+        grid-template-columns: repeat(2, auto);
+    }
+
+    .imagen-nav{
+        width: 20vh;
+    }
+}
+
+/* Móvil */
+@media (max-width: 768px) {
+    body{
+        grid-template-areas: 
+        "hd"
+        "mn"
+        "as"
+        "ft";
+        gap: 10px;
+    }
+
+    .grid-tres-columnas,
+    .grid-4-columnas{
+        grid-template-columns: 1fr;
+    }
+
+    .horizontal{
+        flex-direction: column;
+        gap: 1vh;
+    }
+
+    .imagen-nav{
+        width: 20vh;
+    }
+    .titulo-nav{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+/* pruebas */
+.noticias-header {
+            background-color: #939393;
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        /* Estilo de las flechas arriba a la derecha */
+        .nav-buttons button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0 5px;
+            transition: opacity 0.2s;
+        }
+        .nav-buttons button:hover { opacity: 0.7; }
+
+        /* Estilo de las tarjetas */
+        .news-card { border: none; background: transparent; }
+        .img-container {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .news-title {
+            color: #444;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .news-meta { color: #888; font-size: 0.85rem; }
+
+        /* Quitar indicadores de abajo del carousel */
+        .carousel-indicators { display: none; }
+
+/* prueba 2 */
+/* Estilos específicos para el sistema de autenticación */
+.login-container {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    max-width: 380px;
+    width: 100%;
+    margin: auto;
+}
+.login-container:hover{
+    animation: crecer 0.5s ease-out forwards;
+    box-shadow: 5px 5px 10px #959292 ;
+}
+
+.login-title {
+    font-size: 2rem;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.form-label-custom {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.form-input-custom {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.form-input-custom:focus {
+    border-color: #939393;
+}
+
+.btn-login-custom {
+    background-color: #939393;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    width: 100%;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-login-custom:hover {
+    background-color: #7a7a7a;
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.login-footer a {
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-footer a:hover {
+    text-decoration: underline;
+}
+ /*pruebas 3 */
+/* Altura fija para el carrusel de fotos */
+.carousel-item img {
+    height: 300px; /* Ajusta esta altura a tu gusto */
+    object-fit: cover; /* Evita que la foto se estire */
+    filter: brightness(0.8); /* Oscurece un poco la foto para que el texto resalte */
+}
+
+/* Estilo del texto sobre la foto */
+.carousel-caption {
+    background: rgba(0, 0, 0, 0.4); /* Fondo negro traslúcido */
+    padding: 20px;
+    border-radius: 15px;
+    bottom: 20%; /* Posición del texto */
+}
+
+.carousel-caption h5 {
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.carousel-caption p {
+    font-size: 1.1rem;
+}
+
+/* Indicadores (rayitas de abajo) en color naranja */
+.carousel-indicators [data-bs-target] {
+    background-color: #ff6600;
+    height: 5px;
+}

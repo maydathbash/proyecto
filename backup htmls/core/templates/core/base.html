@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        
+       <title>
+        {% block title %}
+            Showcooking CIFP Nº1 de Cuenca
+        {% endblock %}
+         </title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+
+        <!-- Bootstrap CSS v5.2.1 -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous"
+        />
+        <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        <style>
+            .fondo_naranja{
+                background-color: #e86b1c;
+            }
+
+            header {
+                border-bottom: 3px solid #414447;/* Borde inferior azul de 3px */
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 1000;
+                width: 100%;
+                    
+            }
+
+                nav .nav-animacion {
+                color: #444;
+                text-decoration: none;
+                text-transform: uppercase;
+                font-size: 14px;
+                }
+
+                nav nav-animacion:hover {
+                color: #000;
+                }
+
+                nav .nav-animacion::before {
+                content: '';
+                display: block;
+                height: 5px;
+                background-color: #444;
+
+                position: absolute;
+                top: 0;
+                width: 0%;
+
+                transition: all ease-in-out 250ms;
+                }
+
+                nav .nav-animacion:hover::before {
+                width: 100%;
+                }
+                /* ===== CONTENEDOR GENERAL carrusel ===== */
+                    #carruselRecetas {
+                    overflow: hidden;
+                    }
+
+                    /* Altura elegante */
+                    #carruselRecetas .carousel-inner {
+                    height: 65vh;
+                    }
+
+                    /* Fondo */
+                    #carruselRecetas .carousel-bg {
+                    position: relative;
+                    height: 100%;
+                    background-size: cover;
+                    background-position: center;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    }
+
+                    /* Overlay cinematográfico */
+                    #carruselRecetas .carousel-bg::before {
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    background:
+                        radial-gradient(
+                        circle at center,
+                        rgba(0,0,0,0.15),
+                        rgba(0,0,0,0.6)
+                        );
+                    z-index: 1;
+                    }
+
+                    /* Imagen protagonista */
+                    #carruselRecetas img {
+                    max-height: 60%;
+                    max-width: 60%;
+                    border-radius: 20px;
+                    box-shadow:
+                        0 30px 60px rgba(0,0,0,.45),
+                        0 0 0 1px rgba(255,255,255,.08);
+                    transition: transform .6s ease;
+                    z-index: 2;
+                    }
+
+                    /* Zoom suave */
+                    #carruselRecetas .carousel-item.active img {
+                    transform: scale(1.03);
+                    }
+
+                    /* Caption estilo revista */
+                    #carruselRecetas .carousel-caption {
+                    backdrop-filter: blur(10px);
+                    background: rgba(255,255,255,.18) !important;
+                    border-radius: 18px;
+                    padding: 1.5rem 2rem;
+                    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+                    z-index: 3;
+                    }
+
+                    /* Texto */
+                    #carruselRecetas .carousel-caption h5 {
+                    font-size: 1.6rem;
+                    font-weight: 700;
+                    letter-spacing: .5px;
+                    }
+
+                    #carruselRecetas .carousel-caption p {
+                    font-size: .95rem;
+                    margin-bottom: .5rem;
+                    }
+
+                    #carruselRecetas .carousel-caption small {
+                    opacity: .85;
+                    }
+
+                    /* Indicadores pro */
+                    #carruselRecetas .carousel-indicators button {
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                    background-color: rgba(255,255,255,.6);
+                    }
+
+                    #carruselRecetas .carousel-indicators .active {
+                    background-color: #fff;
+                    transform: scale(1.2);
+                    }
+
+                    /* Mobile */
+                    @media (max-width: 768px) {
+                    #carruselRecetas .carousel-inner {
+                        height: 50vh;
+                    }
+
+                    #carruselRecetas img {
+                        max-width: 95%;
+                    }
+
+                    #carruselRecetas .carousel-caption {
+                        font-size: .85rem;
+                    }
+                    }
+
+                    /* showcookings recientes */
+                    .cooking-card {
+                    border: none;
+                    border-radius: 16px;
+                    overflow: hidden;
+                    transition: transform .3s ease, box-shadow .3s ease;
+                    }
+
+                    .cooking-card:hover {
+                    transform: translateY(-6px);
+                    box-shadow: 0 12px 30px rgba(0,0,0,.15);
+                    }
+
+                    .card-img-wrapper {
+                    position: relative;
+                    height: 180px;
+                    overflow: hidden;
+                    }
+
+                    .card-img-wrapper img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    transition: transform .4s ease;
+                    }
+
+                    .cooking-card:hover img {
+                    transform: scale(1.08);
+                    }
+
+                    .card-body {
+                    padding: 1rem 1.2rem;
+                    }
+
+           
+        </style>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-lg fondo_naranja">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#"><img src="{% static 'img/logo.png'%}" alt=""></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse " id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto me-5 mb-2 mb-lg-0">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle nav-animacion" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            {% if user.es_admin == True %}
+                                <li><a class="dropdown-item nav-animacion" href="/admin/">Admin</a></li>
+                                <li><a class="dropdown-item nav-animacion" href=""></a></li>
+                            {% endif %}
+                            {% if user.es_cocinero == True %}
+                                <li><a class="dropdown-item nav-animacion" href="#">Crear ShowCooking</a></li>
+                            {% endif %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'cerrar_sesion' %}">Cerrar sesion</a></li>
+                        </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'iniciar_sesion' %}">Iniciar sesion</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'registro_usuario' %}">Registrarse</a>
+                        </li>
+                    {% endif %}
+                </ul>
+                </div>
+            </div>
+            </nav>
+        </header>
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+        <br><br>
+
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top fondo-naranja"> 
+            <div class="col-md-4 d-flex align-items-center"> 
+                <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1" aria-label="Bootstrap"> 
+                    <svg class="bi" width="30" height="24" aria-hidden="true">
+                        <use xlink:href="#bootstrap"></use></svg> 
+                </a> 
+                <span class="mb-3 mb-md-0 text-body-secondary">© 2025 Company, Inc</span> 
+            </div> 
+            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"> 
+                <li class="ms-3"><a class="text-body-secondary" href="#" aria-label="Instagram">
+                    <svg class="bi" width="24" height="24" aria-hidden="true"><use xlink:href="#instagram"></use></svg></a>
+                </li> 
+                <li class="ms-3"><a class="text-body-secondary" href="#" aria-label="Facebook">
+                    <svg class="bi" width="24" height="24"><use xlink:href="#facebook"></use></svg></a>
+                </li> 
+            </ul> 
+        </footer>
+        <!-- Bootstrap JavaScript Libraries -->
+        <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+            crossorigin="anonymous"
+        ></script>
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+            integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+            crossorigin="anonymous"
+        ></script>
+    </body>
+</html>
