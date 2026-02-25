@@ -26,40 +26,37 @@
         />
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
         {% load static %}
-        <link rel="stylesheet" href="{% static '/css/base.css' %}?v=2"/>
+        <link rel="stylesheet" href="{% static '/css/base.css' %}?v=2.1"/>
+        <link rel="stylesheet" href="{% static '/css/responsive.css' %}">
         
     </head>
     <body>
-        <header class="">
-            <div class="grid-tres-columnas paddingy">
-                <img src="{% static 'img/cifpcuencanro1.png' %}" class="imagen-nav" alt="">
-                <h1 class="titulo-nav pt-2 bungee-regular">ShowCooking</h1>
+        <header role="banner" aria-label="Cabecera principal">
+            <div class="grid-tres-columnas responsivo-1-header paddingy">
+                <img src="{% static '/img/cifp.png' %}" class="imagen-nav" alt="Logotipo del centro educativo CIFP Cuenca" aria-hidden="true">
+                <h1 class="titulo-nav pt-2 gravitas-one-regular" aria-label="ShowCooking - Plataforma de cocina en directo">ShowCooking</h1>
             </div>
-            <div class="grid-4-columnas fondo-naranja hd-2 paddingy">
+            <nav class="grid-4-columnas responsivo-2-header fondo-naranja hd-2 paddingy" role="navigation" aria-label="Menú principal">
                 <div class="uno-gr horizontal a-blancos">
-                    <a href="" class="p">Index</a>
-                    <a href="" class="">Recetas</a>
+                    <a href="{% url 'core-index' %}" class="p" aria-current="page" aria-label="Página de inicio actual">Inicio</a>
+                    <a href="showcooking.html" aria-label="Ver showcookings destacados">Showcookings</a>
                 </div>
-                <div class="especifico-gr horizontal " >
-                    <a href="" class=""></a>
-                </div>
-                
-            </div>
+            </nav>
         </header>
-        <main>
+        <main role="main" id="contenido-principal" aria-label="Contenido principal">
             {% block content %}
             {% endblock %}
         </main>
         <br><br>
 
-        <footer class="fondo-gris paddingy">
+        <footer class="fondo-gris paddingy" role="contentinfo" aria-label="Pie de página con información institucional">
                 <div class="c pt-4">© 2021 - 2023 CIFP Nº 1 | Fuensanta, 3 - 16002 - Cuenca</div>
                 <div class="edu">16010042.cifppu@educastillalamancha.es</div>
-                <div class="pic">
-                    <img src="{% static 'img/UnionEuropea.png' %}" alt="">
-                    <img src="{% static 'img/UnionEuropea2.png' %}" alt="">
-                    <img src="{% static 'img/MinisterioDeEducacónFormacionProfesionalYDeportes.jpg' %}" alt="">
-                    <img class="especifica" src="{% static 'img/GobiernoDeCastillaLaMancha.jpg' %}" alt="">
+                <div class="pic" aria-label="Logotipos de instituciones colaboradoras">
+                    <img src="{% static 'img/UnionEuropea.png' %}" alt="Logotipo de la union europea">
+                    <img src="{% static 'img/UnionEuropea2.png' %}" alt="Logotipo de la union Europa - Fondo social europeoº">
+                    <img src="{% static 'img/MinisterioDeEducacónFormacionProfesionalYDeportes.jpg' %}" alt="Logotipo del ministerio de Formacion profesional y deportesº">
+                    <img class="especifica" src="{% static 'img/GobiernoDeCastillaLaMancha.jpg' %}" alt="Logotipo del Gobierno De Castilla La Mancha">
                 </div>
         </footer>
         <!-- Bootstrap JavaScript Libraries -->

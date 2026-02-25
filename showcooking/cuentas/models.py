@@ -22,7 +22,7 @@ class Usuario(AbstractUser):
     def __str__(self):
         return f"{self.username} ({self.tipo_usuario})"
     def es_admin(self):
-        if self.tipo_usuario == 'Administrador':
+        if str(self.tipo_usuario) == "Administrador":
             return True
         else:
             return False

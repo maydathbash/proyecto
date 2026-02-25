@@ -6,19 +6,19 @@
   <div class="paddingy tres-columnas-main">
                 <div class="uno-gr">
                     <div class="container my-5">
-                    <div class="noticias-header">
+                    <div class="noticias-header"  role="region" aria-labelledby="titulo-mejor-valorados">
                         <h2 class="m-0 fs-4 fw-light">Últimas Noticias</h2>
-                        <div class="nav-buttons">
-                            <button type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">
+                        <div class="nav-buttons" aria-label="Controles del carrusel">
+                            <button type="button" data-bs-target="#newsCarousel" data-bs-slide="prev" aria-label="Anterior - Ver showcookings anteriores">
                                 <i class="bi bi-chevron-left"></i>
                             </button>
-                            <button type="button" data-bs-target="#newsCarousel" data-bs-slide="next">
+                            <button type="button" data-bs-target="#newsCarousel" data-bs-slide="next" aria-label="Siguiente - Ver más showcookings">
                                 <i class="bi bi-chevron-right"></i>
                             </button>
                         </div>
                     </div>
 
-                    <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel" aria-label="Carrusel de showcookings destacados">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <div class="row">
@@ -26,8 +26,8 @@
                                     <div class="col-md-4 d-none d-md-block">
                                       <a href="{% url 'detalle_showcooking' cooking.id %}">
                                         <div class="news-card">
-                                            <div class="img-container"><img src="{{ cooking.imagen.url }}"></div>
-                                            <a href="#" class="news-title">{{ cooking.titulo }}</a>
+                                            <div class="img-container"><img src="{{ cooking.imagen.url }}" alt="Imagen del showcooking: {{ cooking.titulo }}"></div>
+                                            <a href="#" class="news-title" aria-label="Ver detalle: {{ cooking.titulo }}">{{ cooking.titulo }}</a>
                                             <p class="news-meta">{{ cooking.descripcion|truncatewords:20 }}</p>
                                         </div>
                                         </a>
@@ -44,9 +44,9 @@
                                             <a href="{% url 'detalle_showcooking' cooking.id %}">
                                                 <div class="news-card">
                                                     <div class="img-container">
-                                                        <img src="{{ cooking.imagen.url }}">
-                                                    </div>
-                                                    <span class="news-title">{{ cooking.titulo }}</span>
+                                                        <img src="{{ cooking.imagen.url }}" alt="Imagen del showcooking: {{ cooking.titulo }}">
+                                                    </div> 
+                                                    <span class="news-title" aria-label="Ver detalle: {{ cooking.titulo }}">{{ cooking.titulo }}</span>
                                                     <p class="news-meta">
                                                         {{ cooking.descripcion|truncatewords:20 }}
                                                     </p>
@@ -65,10 +65,10 @@
                 <div class="dos-gr border-end border-2 border-secondary"></div>
                 <div class="tres-gr p-3">
                   {% if not user.is_authenticated %}
-                   <div class="login-container">
+                   <div class="login-container" role="region" aria-labelledby="titulo-login">
                     <h2 class="login-title">Iniciar Sesión</h2>
                     
-                   <form method="post" action="{% url 'login' %}">
+                   <form method="post" action="{% url 'login' %}" aria-label="formulario de acceso">
                     {% csrf_token %}
                     
                     {# Campo de Usuario #}
@@ -87,27 +87,27 @@
                         {{ form.password }}
                     </div>
 
-                    <button type="submit" class="btn btn-primary mt-3">Entrar</button>
+                    <button type="submit" class="btn btn-primary btn-login-custom mt-3" aria-label="Iniciar sesion a la plataforma">Entrar</button>
                 </form>
 
-                    <div class="login-footer">
+                    <div class="login-footer" aria-label="Crear cuenta">
                         ¿No estás registrado? <a href="{% url 'registro_usuario' %}">Crear cuenta</a>
                     </div>
                 </div>
                 {% else %}
                 <div class="login-container">
-                    <h2 class="login-title">{{ user.username}}</h2>
+                    <h2 class="login-title" aria-label="Usuario: {{user.username}}">{{ user.username}}</h2>
                     <hr>
-                    {% if user.es_admin %}
-                      <ul>
+                    <ul id="botones-logeados">
+                    {% if user.es_admin  %}
                         <li><a class="" href="/admin/">Admin</a></li>
                         <li></li>
                       
                       {% else %}
                         <p>hola</p>
                       {% endif %}
-                      <li><hr class=""></li>
-                            <li><a class="" href="{% url 'cerrar_sesion' %}">Cerrar sesion</a></li>
+                      <br>
+                            <li><a class="" href="{% url 'cerrar_sesion' %}" id="cerrar-sesion">Cerrar sesion</a></li>
                       </ul>
                 </div>
                 {% endif %}

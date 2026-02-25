@@ -1,0 +1,48 @@
+@media ( max-width:768px ){
+    body{
+        grid-template-areas: 
+        "hd"
+        "mn"
+        "ft";
+        width: 100%;
+    }
+    footer{
+        width: 50%;
+    }
+    .responsivo-1-header{
+        grid-template-columns: auto;
+    }
+    .imagen-nav{
+        display: none;
+    }
+    .titulo-nav{
+        display: flex;
+        align-items: start;
+        justify-content: start;
+    }
+    .responsivo-2-header{
+        grid-template-columns: auto;
+    }
+    .responsivo-1-main .dos-gr, .responsivo-1-main .tres-gr{
+        display: none;
+    }
+    .responsivo-1-main{
+        display: flex;
+        justify-content: center;
+        width: auto;
+    }
+    .responsivo-2-main{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10vh;
+    }
+    .responsivo-2-main .uno-gr{
+        width: 100%;
+    }
+    .responsivo-2-main .dos-gr{
+        display: none;
+
+    }
+
+}
