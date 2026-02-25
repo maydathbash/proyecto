@@ -98,11 +98,14 @@
               <iframe src="{{showcooking.url_youtube}}" frameborder="0"></iframe>
             {% endif %}
           <h2>Recetas</h2>
-          <ul>
-            {% for receta in recetas %}
-              <li>{{receta.titulo}}</li>
-            {% endfor%}
-          </ul>
+           {% for receta in recetas %}
+            <div class="card" style="width: 18rem;">
+              <img src="{{receta.imagen.url}}" class="card-img-top" alt="Imagen de la receta">
+              <div class="card-body">
+                <p class="card-text">{{receta.titulo}} | {{receta.descripcion}}.</p>
+              </div>
+            </div>
+            {% endfor %}
         </div>
 
       </div>
