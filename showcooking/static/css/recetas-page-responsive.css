@@ -1,0 +1,56 @@
+@media (max-width: 1200px) {
+  .recetas-page {
+    padding-left: 8vw;
+    padding-right: 8vw;
+  }
+
+  .recetas-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 992px) {
+  .recetas-head__top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .recetas-kpis {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .receta-destacada {
+    grid-template-columns: 1fr;
+  }
+
+  .receta-destacada__media {
+    min-height: 230px;
+  }
+
+  .form-busqueda-recetas {
+    width: 100%;
+  }
+
+  .form-busqueda-recetas .form-control {
+    flex: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .recetas-page {
+    padding: 1.1rem 5vw 0;
+  }
+
+  .recetas-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-busqueda-recetas {
+    flex-direction: column;
+  }
+
+  .form-busqueda-recetas .btn {
+    width: 100%;
+  }
+}

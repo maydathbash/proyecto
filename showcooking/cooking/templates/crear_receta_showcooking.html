@@ -1,0 +1,53 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/chef-creator.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="chef-create">
+  <section class="chef-create__panel">
+    <h2>Anadir receta a: {{ showcooking.titulo }}</h2>
+    <p class="text-muted">Todas las recetas creadas aqui quedaran vinculadas a este showcooking.</p>
+
+    <form method="post" enctype="multipart/form-data" class="chef-form-grid">
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="chef-field {% if field.name == 'descripcion' or field.name == 'instrucciones' %}chef-field--full{% endif %}">
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.name == 'nueva_categoria' %}
+          <small class="text-muted">Si escribes una categoria nueva, se creara automaticamente y se asignara a esta receta.</small>
+        {% endif %}
+        {% if field.errors %}
+          <small class="text-danger">{{ field.errors|striptags }}</small>
+        {% endif %}
+      </div>
+      {% endfor %}
+
+      <div class="chef-field--full d-flex gap-2 flex-wrap">
+        <button class="btn btn-dark" type="submit">Guardar receta</button>
+        <a href="{% url 'detalle_showcooking' showcooking.id %}" class="btn btn-outline-secondary">Ver detalle del showcooking</a>
+      </div>
+    </form>
+  </section>
+
+  <section class="chef-create__panel">
+    <h3>Recetas del showcooking</h3>
+    <div class="chef-list">
+      {% for receta in recetas_del_show %}
+      <article class="chef-item">
+        <div>
+          <strong>{{ receta.titulo }}</strong>
+          <p class="mb-0 text-muted">{{ receta.descripcion|truncatewords:18 }}</p>
+        </div>
+        <a href="{% url 'detalle_receta' receta.id %}" class="btn btn-sm btn-outline-dark">Ver</a>
+      </article>
+      {% empty %}
+      <p class="text-muted mb-0">Aun no has anadido recetas a este showcooking.</p>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock content %}

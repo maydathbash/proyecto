@@ -7,7 +7,7 @@
         width: 100%;
     }
     footer{
-        width: 50%;
+        width: 100%;
     }
     .responsivo-1-header{
         grid-template-columns: auto;

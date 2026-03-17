@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Show de Cocina</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Detalles del Show de Cocina</h1>
+    </header>
+    <main>
+        <section>
+            <h2>{{ show.title }}</h2>
+            <img src="{{ show.image.url }}" alt="{{ show.title }}">
+            <p>{{ show.description }}</p>
+            <h3>Recetas:</h3>
+            <ul>
+                {% for receta in show.recipes.all %}
+                    <li>
+                        <a href="{% url 'detalle_receta' receta.id %}">{{ receta.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Show Cooking. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

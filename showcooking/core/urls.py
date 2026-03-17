@@ -7,6 +7,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='core-index'),
+    path('recetas/', views.recetas, name='core-recetas'),
     path('cerrar_sesion/', views.cerrar_sesion, name='cerrar_sesion'),
 ]
 

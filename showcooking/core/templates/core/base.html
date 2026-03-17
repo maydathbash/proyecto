@@ -28,6 +28,7 @@
         {% load static %}
         <link rel="stylesheet" href="{% static '/css/base.css' %}?v=2.1"/>
         <link rel="stylesheet" href="{% static '/css/responsive.css' %}">
+        {% block extra_css %}{% endblock %}
         
     </head>
     <body>
@@ -39,11 +40,21 @@
             <nav class="grid-4-columnas responsivo-2-header fondo-naranja hd-2 paddingy" role="navigation" aria-label="Menú principal">
                 <div class="uno-gr horizontal a-blancos">
                     <a href="{% url 'core-index' %}" class="p" aria-current="page" aria-label="Página de inicio actual">Inicio</a>
-                    <a href="showcooking.html" aria-label="Ver showcookings destacados">Showcookings</a>
+                    <a href="{% url 'core-recetas' %}" aria-label="Ver recetas">Recetas</a>
                 </div>
             </nav>
         </header>
         <main role="main" id="contenido-principal" aria-label="Contenido principal">
+            {% if messages %}
+            <div class="container mt-3">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
             {% block content %}
             {% endblock %}
         </main>

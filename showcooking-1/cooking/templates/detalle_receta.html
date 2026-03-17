@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Receta</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Detalle de la Receta</h1>
+        </header>
+        <main>
+            <div class="receta">
+                <h2>{{ receta.titulo }}</h2>
+                <img src="{{ receta.imagen.url }}" alt="{{ receta.titulo }}">
+                <p><strong>Descripción:</strong> {{ receta.descripcion }}</p>
+                <h3>Ingredientes:</h3>
+                <ul>
+                    {% for ingrediente in receta.ingredientes.all %}
+                        <li>{{ ingrediente.nombre }} - {{ ingrediente.cantidad }}</li>
+                    {% endfor %}
+                </ul>
+                <h3>Instrucciones:</h3>
+                <p>{{ receta.instrucciones }}</p>
+            </div>
+        </main>
+        <footer>
+            <p>&copy; 2023 Showcooking. Todos los derechos reservados.</p>
+        </footer>
+    </div>
+</body>
+</html>

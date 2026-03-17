@@ -1,0 +1,38 @@
+@media (max-width: 1200px) {
+  .index-home {
+    padding-left: 8vw;
+    padding-right: 8vw;
+  }
+}
+
+@media (max-width: 992px) {
+  .index-home__superior,
+  .index-home__bloques {
+    grid-template-columns: 1fr;
+  }
+
+  .tarjeta-usuario {
+    margin-top: 0.4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .index-home {
+    padding: 1.2rem 5vw 0;
+  }
+
+  .noticia-card__imagen,
+  .card-img-wrapper,
+  .carrusel-recetas .carousel-item img,
+  .sin-recetas {
+    height: 220px;
+  }
+
+  .form-busqueda-index {
+    flex-direction: column;
+  }
+
+  .form-busqueda-index .btn {
+    width: 100%;
+  }
+}

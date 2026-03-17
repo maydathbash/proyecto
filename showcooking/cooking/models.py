@@ -3,6 +3,7 @@ from django.conf import settings
 from cuentas.models import Usuario,Chef 
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Avg, Count
+from urllib.parse import parse_qs, urlparse
 # Create your models here.
 
 class Categoria_receta(models.Model):
@@ -42,9 +43,26 @@ class Showcooking(models.Model):
 
     
     def youtube_id(self):
-        if "youtu.be" in self.url_youtube:
-            return self.url_youtube.split("/")[-1]
-        return self.url_youtube.split("v=")[-1].split("&")[0]
+        if not self.url_youtube:
+            return None
+        val = str(self.url_youtube).strip()
+        if val.startswith('www.'):
+            val = f'https://{val}'
+
+        parsed = urlparse(val)
+        host = (parsed.netloc or '').lower()
+        path = parsed.path or ''
+
+        if 'youtu.be' in host:
+            return path.strip('/').split('/')[0] or None
+
+        if 'youtube.com' in host or 'youtube-nocookie.com' in host:
+            parts = [p for p in path.split('/') if p]
+            if parts and parts[0] in ('shorts', 'live', 'v', 'embed') and len(parts) > 1:
+                return parts[1]
+            return parse_qs(parsed.query).get('v', [None])[0]
+
+        return None
     def __str__(self):
         return self.titulo
 class Receta(models.Model):
@@ -73,12 +91,11 @@ class Receta(models.Model):
 #probar a ver como funciona el foreignkey
 class Chef_ShowCooking(models.Model):
     id_showcooking=models.ForeignKey(Showcooking, on_delete=models.CASCADE)
-    id_chef=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default="Vacio")
+    id_chef=models.ForeignKey('cuentas.Chef', on_delete=models.CASCADE)
     def __str__(self):
-        # Retorna el username del autor
-        return self.id_chef.username
+        return f"{self.id_chef} -> {self.id_showcooking}"
 class Chef_Recetas(models.Model):
-    id_chef=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default="AA")
+    id_chef=models.ForeignKey('cuentas.Chef', on_delete=models.CASCADE)
     id_receta=models.ForeignKey(Receta, on_delete=models.CASCADE)
 
 class ingredientes(models.Model):

@@ -29,6 +29,10 @@ class ValoracionShowcooking(models.Model):
     class Meta:
         unique_together = ['usuario', 'showcooking']  # 1 valoración por usuario
         ordering = ['-fecha_creacion']
+
+    @property
+    def estrellas(self):
+        return ('★' * self.puntuacion) + ('☆' * (5 - self.puntuacion))
     
     def __str__(self):
         return f"{self.usuario} - {self.showcooking}: {self.puntuacion}★"
@@ -50,10 +54,15 @@ class ValoracionReceta(models.Model):
     puntuacion = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
+    comentario = models.TextField(blank=True)
     
     
     class Meta:
         unique_together = ['usuario', 'receta']  # 1 valoración por usuario
+
+    @property
+    def estrellas(self):
+        return ('★' * self.puntuacion) + ('☆' * (5 - self.puntuacion))
         
     
     def __str__(self):

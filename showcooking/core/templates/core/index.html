@@ -1,171 +1,225 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/index-home.css' %}">
+<link rel="stylesheet" href="{% static 'css/index-home-responsive.css' %}">
+{% endblock %}
 
 {% block content %}
-  <div class="paddingy tres-columnas-main">
-                <div class="uno-gr">
-                    <div class="container my-5">
-                    <div class="noticias-header"  role="region" aria-labelledby="titulo-mejor-valorados">
-                        <h2 class="m-0 fs-4 fw-light">Últimas Noticias</h2>
-                        <div class="nav-buttons" aria-label="Controles del carrusel">
-                            <button type="button" data-bs-target="#newsCarousel" data-bs-slide="prev" aria-label="Anterior - Ver showcookings anteriores">
-                                <i class="bi bi-chevron-left"></i>
-                            </button>
-                            <button type="button" data-bs-target="#newsCarousel" data-bs-slide="next" aria-label="Siguiente - Ver más showcookings">
-                                <i class="bi bi-chevron-right"></i>
-                            </button>
-                        </div>
-                    </div>
+<div class="index-home">
+  <section class="index-home__superior">
+    <div class="index-home__noticias tarjeta-base" role="region" aria-labelledby="titulo-mejor-valorados">
+      <div class="tarjeta-cabecera">
+        <h3 id="titulo-mejor-valorados">Showcookings</h3>
+        <div class="controles-carrusel" aria-label="Controles del carrusel">
+          <button type="button" data-bs-target="#newsCarousel" data-bs-slide="prev" aria-label="Anterior">‹</button>
+          <button type="button" data-bs-target="#newsCarousel" data-bs-slide="next" aria-label="Siguiente">›</button>
+        </div>
+      </div>
 
-                    <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel" aria-label="Carrusel de showcookings destacados">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <div class="row">
-                                    {% for cooking in mejores_showcookings %}
-                                    <div class="col-md-4 d-none d-md-block">
-                                      <a href="{% url 'detalle_showcooking' cooking.id %}">
-                                        <div class="news-card">
-                                            <div class="img-container"><img src="{{ cooking.imagen.url }}" alt="Imagen del showcooking: {{ cooking.titulo }}"></div>
-                                            <a href="#" class="news-title" aria-label="Ver detalle: {{ cooking.titulo }}">{{ cooking.titulo }}</a>
-                                            <p class="news-meta">{{ cooking.descripcion|truncatewords:20 }}</p>
-                                        </div>
-                                        </a>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            <!--No funciona, falta tratamiento en caso de que no incluya -->
-                            {% if mejores_showcookings2 %}
-                            <div class="carousel-item">
-                                <div class="row">
-                                    {% for cooking in mejores_showcookings2 %}
-                                        <div class="col-md-4 d-none d-md-block">
-                                            <a href="{% url 'detalle_showcooking' cooking.id %}">
-                                                <div class="news-card">
-                                                    <div class="img-container">
-                                                        <img src="{{ cooking.imagen.url }}" alt="Imagen del showcooking: {{ cooking.titulo }}">
-                                                    </div> 
-                                                    <span class="news-title" aria-label="Ver detalle: {{ cooking.titulo }}">{{ cooking.titulo }}</span>
-                                                    <p class="news-meta">
-                                                        {{ cooking.descripcion|truncatewords:20 }}
-                                                    </p>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            {% endif %}
-
-                        </div>
+      <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="row g-3 p-3">
+              {% for cooking in mejores_showcookings %}
+              <div class="col-md-4">
+                <a href="{% url 'detalle_showcooking' cooking.id %}">
+                  <article class="noticia-card">
+                    <div class="noticia-card__imagen">
+                      <img src="{{ cooking.imagen.url }}" alt="Imagen del showcooking: {{ cooking.titulo }}">
                     </div>
-                </div>
-                </div>
-                <div class="dos-gr border-end border-2 border-secondary"></div>
-                <div class="tres-gr p-3">
-                  {% if not user.is_authenticated %}
-                   <div class="login-container" role="region" aria-labelledby="titulo-login">
-                    <h2 class="login-title">Iniciar Sesión</h2>
-                    
-                   <form method="post" action="{% url 'login' %}" aria-label="formulario de acceso">
-                    {% csrf_token %}
-                    
-                    {# Campo de Usuario #}
-                    <div class="form-group">
-                        <label class="form-label-custom" for="{{ form.username.id_for_label }}">
-                            Usuario
-                        </label>
-                        {{ form.username }}
+                    <div class="noticia-card__contenido">
+                      <h4>{{ cooking.titulo }}</h4>
+                      <p>{{ cooking.descripcion|truncatewords:20 }}</p>
                     </div>
-                    
-                    {# Campo de Contraseña #}
-                    <div class="form-group">
-                        <label class="form-label-custom" for="{{ form.password.id_for_label }}">
-                            Contraseña
-                        </label>
-                        {{ form.password }}
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-login-custom mt-3" aria-label="Iniciar sesion a la plataforma">Entrar</button>
-                </form>
-
-                    <div class="login-footer" aria-label="Crear cuenta">
-                        ¿No estás registrado? <a href="{% url 'registro_usuario' %}">Crear cuenta</a>
-                    </div>
-                </div>
-                {% else %}
-                <div class="login-container">
-                    <h2 class="login-title" aria-label="Usuario: {{user.username}}">{{ user.username}}</h2>
-                    <hr>
-                    <ul id="botones-logeados">
-                    {% if user.es_admin  %}
-                        <li><a class="" href="/admin/">Admin</a></li>
-                        <li></li>
-                      
-                      {% else %}
-                        <p>hola</p>
-                      {% endif %}
-                      <br>
-                            <li><a class="" href="{% url 'cerrar_sesion' %}" id="cerrar-sesion">Cerrar sesion</a></li>
-                      </ul>
-                </div>
-                {% endif %}
-                </div>
+                  </article>
+                </a>
+              </div>
+              {% empty %}
+              <div class="col-12 text-muted">No hay showcookings destacados todavia.</div>
+              {% endfor %}
             </div>
-            <div class="paddingy grid-dos-columnas pt-lg-5">
-                <div class="uno-gr estilo-sh-reciente fondo-gris">
-                    <div class="p-2 estilo-sh-reciente fondo-naranja">
-                        <h4>Showcookings recientes</h4>
-                    </div>
-                    <ul class="estilo-lista">
-                        {% for cooking in show %}
-                            <li>
-                                <h5>
-                                <a href="{% url 'detalle_showcooking' cooking.id %}">{{cooking.titulo}}</a>
-                                </h5>
-                                <p>
-                                    {{cooking.fecha_creacion}}
-                                </p>
-                            </li>
-                        {% endfor %}
-                      </ul>
-                </div>
-                <div class="dos-gr estilo-sh-reciente fondo-gris">
-                    <div class="p-2 estilo-sh-reciente fondo-gris-oscuro">
-                        <h4>recetas famosas</h4>
-                    </div>
-                    <div class="container my-5">
-                    <div id="carouselExampleCaptions" class="carousel slide shadow-lg" data-bs-ride="carousel">
-                        
-                        <div class="carousel-indicators">
-                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"></button>
-                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"></button>
-                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"></button>
-                        </div>
+          </div>
 
-                        <div class="carousel-inner rounded-4">
-                        {% for receta in mejores_recetas %}
-                            <div class="carousel-item {% if forloop.first %}active {% endif %}" data-bs-interval="4000">
-                                <img src="{{receta.imagen.url}}" class="d-block w-100" alt="Receta 1">
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5>{{receta.titulo}}</h5>
-                                    <p>{{receta.descripcion}}</p>
-                                </div>
-                            </div>
-                        {% endfor %}
-                        </div>
-
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Anterior</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Siguiente</span>
-                        </button>
+          {% if mejores_showcookings2 %}
+          <div class="carousel-item">
+            <div class="row g-3 p-3">
+              {% for cooking in mejores_showcookings2 %}
+              <div class="col-md-4">
+                <a href="{% url 'detalle_showcooking' cooking.id %}">
+                  <article class="noticia-card">
+                    <div class="noticia-card__imagen">
+                      <img src="{{ cooking.imagen.url }}" alt="Imagen del showcooking: {{ cooking.titulo }}">
                     </div>
-                </div>
-                </div>
+                    <div class="noticia-card__contenido">
+                      <h4>{{ cooking.titulo }}</h4>
+                      <p>{{ cooking.descripcion|truncatewords:20 }}</p>
+                    </div>
+                  </article>
+                </a>
+              </div>
+              {% endfor %}
             </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <aside class="index-home__usuario">
+      {% if not user.is_authenticated %}
+      <div class="tarjeta-usuario" role="region" aria-labelledby="titulo-login">
+        <h2 id="titulo-login">Iniciar sesion</h2>
+
+        <form method="post" action="{% url 'login' %}" aria-label="formulario de acceso">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="etiqueta-campo" for="{{ form.username.id_for_label }}">Usuario</label>
+            {{ form.username }}
+          </div>
+
+          <div class="mb-3">
+            <label class="etiqueta-campo" for="{{ form.password.id_for_label }}">Contrasena</label>
+            {{ form.password }}
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-login-custom btn-panel">Entrar</button>
+        </form>
+
+        <p class="texto-login mt-3 mb-0">
+          No estas registrado? <a href="{% url 'registro_usuario' %}">Crear cuenta</a>
+        </p>
+      </div>
+      {% else %}
+      <div class="tarjeta-usuario" role="region" aria-labelledby="titulo-usuario-logeado">
+        <div class="cabecera-usuario">
+          <div class="avatar-usuario">{{ user.username|first|upper }}</div>
+          <div>
+            <h2 class="mb-0" id="titulo-usuario-logeado">{{ user.username }}</h2>
+            <small class="text-muted">Sesion iniciada</small>
+          </div>
+        </div>
+
+        <div class="mb-3 mt-3">
+          <span class="rol-pill">Registrado</span>
+          {% if panel_is_chef %}<span class="rol-pill">Chef</span>{% endif %}
+          {% if panel_is_admin %}<span class="rol-pill">Admin</span>{% endif %}
+        </div>
+
+        <div class="d-grid gap-2">
+          <a href="{% url 'usuario-dashboard' %}" class="btn btn-primary btn-panel">Ir a mi perfil</a>
+          <a href="{% url 'usuario-publico' user.username %}" class="btn btn-outline-dark btn-panel">Ver mi perfil publico</a>
+          {% if panel_is_admin %}
+          <a href="/admin/" class="btn btn-outline-secondary btn-panel">Panel admin</a>
+          {% endif %}
+          {% if panel_is_chef and create_showcooking_url %}
+          <a href="{{ create_showcooking_url }}" class="btn btn-outline-dark btn-panel">Crear showcooking</a>
+          {% endif %}
+          <a href="{% url 'cerrar_sesion' %}" class="btn btn-outline-danger btn-panel">Cerrar sesion</a>
+        </div>
+      </div>
+      {% endif %}
+    </aside>
+  </section>
+
+  <section class="index-home__bloques" id="showcookings">
+    <div class="tarjeta-base">
+      <div class="tarjeta-cabecera tarjeta-cabecera--naranja">
+        <h3>Showcookings recientes</h3>
+      </div>
+
+      <ul class="lista-recientes">
+        {% for cooking in show %}
+        <li>
+          <a href="{% url 'detalle_showcooking' cooking.id %}">{{ cooking.titulo }}</a>
+          <small>{{ cooking.fecha_creacion|date:"d/m/Y H:i" }}</small>
+        </li>
+        {% empty %}
+        <li class="text-muted">Todavia no hay showcookings recientes.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="tarjeta-base">
+      <div class="tarjeta-cabecera tarjeta-cabecera--gris">
+        <h3>Showcookings famosos</h3>
+      </div>
+
+      <div class="bloque-recetas p-3">
+        <div id="carouselShowcookingsFamosos" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3500" data-bs-pause="false" data-bs-wrap="true">
+          {% if showcookings_famosos|length > 1 %}
+          <div class="carousel-indicators">
+            {% for cooking in showcookings_famosos %}
+            <button type="button" data-bs-target="#carouselShowcookingsFamosos" data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" aria-current="{% if forloop.first %}true{% endif %}" aria-label="Slide {{ forloop.counter }}"></button>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <div class="carousel-inner carrusel-recetas">
+            {% for cooking in showcookings_famosos %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="4000">
+              <a href="{% url 'detalle_showcooking' cooking.id %}">
+              {% if cooking.imagen %}
+              <img src="{{ cooking.imagen.url }}" class="d-block w-100" alt="{{ cooking.titulo }}">
+              {% else %}
+              <div class="sin-recetas">Sin imagen</div>
+              {% endif %}
+              <div class="carousel-caption d-none d-md-block">
+                <h5>{{ cooking.titulo }}</h5>
+                <p>{{ cooking.descripcion|truncatewords:15 }}</p>
+              </div>
+              </a>
+            </div>
+            {% empty %}
+            <div class="carousel-item active">
+              <div class="sin-recetas">No hay showcookings destacados.</div>
+            </div>
+            {% endfor %}
+          </div>
+
+          {% if showcookings_famosos|length > 1 %}
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselShowcookingsFamosos" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselShowcookingsFamosos" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+          </button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tarjeta-base bloque-busqueda mt-4">
+    <div class="row align-items-center g-3">
+      <div class="col-md-4">
+        <h4 class="mb-0">Buscar showcookings</h4>
+      </div>
+
+      <div class="col-md-8">
+        <form method="get" action="{% url 'core-index' %}" class="d-flex gap-2 form-busqueda-index">
+          <input
+            type="text"
+            name="q"
+            value="{{ query }}"
+            placeholder="Escribe titulo o descripcion..."
+            hx-get="{% url 'core-index' %}"
+            hx-target="#resultados-busqueda"
+            hx-push-url="true"
+            hx-trigger="keyup changed delay:350ms, search"
+            class="form-control"
+          >
+          <button type="submit" class="btn btn-dark">Buscar</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="resultados-busqueda" class="row g-4 mt-2">
+      {% include 'partials/lista_cookings.html' %}
+    </div>
+  </section>
+</div>
 {% endblock content %}

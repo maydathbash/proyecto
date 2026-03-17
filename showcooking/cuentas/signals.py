@@ -4,10 +4,5 @@ from .models import Usuario, Chef
 
 @receiver(post_save, sender=Usuario)
 def manejar_perfil_chef(sender, instance, created, **kwargs):
-    # Solo actuamos si el usuario se acaba de crear
-    if created and instance.tipo_usuario == 'cocinero':
-        try:
-            Chef.objects.get_or_create(usuario=instance)
-        except Exception:
-            # Esto evita que el createsuperuser explote si hay problemas de DB
-            pass
+    # La entidad Chef ahora se gestiona por separado y no se crea automaticamente desde Usuario.
+    return

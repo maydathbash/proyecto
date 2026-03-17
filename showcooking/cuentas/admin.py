@@ -7,7 +7,6 @@ class ChefInline(admin.StackedInline):
     model = Chef
     can_delete = False
     verbose_name_plural = 'Datos de Chef'
-    fk_name = 'usuario'
 @admin.register(Usuario)
 class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
@@ -37,7 +36,7 @@ class CustomUserAdmin(UserAdmin):
 @admin.register(Chef)
 class ChefAdmin(admin.ModelAdmin):
     # Aquí solo pones los campos que definiste en la clase Chef de models.py
-    list_display = ('nombre', 'apellidos', 'usuario')
+    list_display = ('nombre', 'apellidos')
     search_fields = ('nombre', 'apellidos')
 @admin.register(Rol)
 class CustomRolAdmin(admin.ModelAdmin):

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Showcooking</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+</head>
+<body>
+    {% include 'core/base.html' %}
+
+    <header>
+        <h1>Bienvenido a Showcooking</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>Cocinas Disponibles</h2>
+            {% include 'partials/lista_cookings.html' %}
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Showcooking. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="{% static 'js/core.js' %}"></script>
+</body>
+</html>

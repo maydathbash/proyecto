@@ -1,3 +1,13 @@
+<div class="col-12 d-flex justify-content-between align-items-center mb-1">
+  <small class="text-muted">
+    {% if search_active %}
+      {{ total_resultados }} resultado{{ total_resultados|pluralize }} para "{{ query }}"
+    {% else %}
+      Mostrando ultimos showcookings publicados
+    {% endif %}
+  </small>
+</div>
+
 {% for cooking in busqueda %}
     <div class="col-sm-6 col-md-4 col-lg-3">
 
@@ -30,6 +40,10 @@
           {{ cooking.descripcion|truncatewords:14 }}
         </p>
 
+        <a href="{% url 'detalle_showcooking' cooking.id %}" class="btn btn-sm btn-outline-dark mt-auto">
+          Ver detalle
+        </a>
+
       </div>
 
     </div>
@@ -37,6 +51,6 @@
   </div>
 {% empty %}
     <div class="col-12 text-center py-5">
-      <p class="lead text-muted">No se encontraron resultados.</p>
+      <p class="lead text-muted">No se encontraron resultados para tu busqueda.</p>
     </div>
 {% endfor %}

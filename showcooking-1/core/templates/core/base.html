@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Cooking</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Bienvenido a Show Cooking</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'core:index' %}">Inicio</a></li>
+                <li><a href="{% url 'cuentas:iniciosesion' %}">Iniciar Sesión</a></li>
+                <li><a href="{% url 'cuentas:registro' %}">Registro</a></li>
+                <li><a href="{% url 'cooking:lista_recetas' %}">Recetas</a></li>
+                <li><a href="{% url 'cooking:lista_showcooking' %}">Shows de Cocina</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Show Cooking. Todos los derechos reservados.</p>
+    </footer>
+    
+    <script src="{% static 'js/core.js' %}"></script>
+</body>
+</html>

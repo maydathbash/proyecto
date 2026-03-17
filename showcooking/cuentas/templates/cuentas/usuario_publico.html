@@ -1,0 +1,77 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/user-profile.css' %}">
+<link rel="stylesheet" href="{% static 'css/user-profile-responsive.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="user-profile user-profile--public">
+  <section class="profile-shell profile-shell--hero">
+    <div class="profile-header">
+      <div class="profile-avatar-wrap">
+        {% if profile_image_url %}
+          <img class="profile-avatar" src="{{ profile_image_url }}" alt="Foto de perfil de {{ profile_user.username }}">
+        {% else %}
+          <div class="profile-avatar-fallback {{ profile_avatar_class }}">{{ profile_initial }}</div>
+        {% endif %}
+      </div>
+
+      <div class="profile-meta">
+        <p class="subhead mb-1">Perfil publico</p>
+        <h2>{{ profile_user.username }}</h2>
+        <span class="profile-role">{{ role_label }}</span>
+        <p>Miembro desde {{ profile_user.date_joined|date:"d/m/Y" }}</p>
+      </div>
+    </div>
+
+    <div class="profile-stats-grid">
+      {% for s in stats %}
+      <article class="profile-stat-card">
+        <small>{{ s.label }}</small>
+        <strong>{{ s.value }}</strong>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="profile-shell">
+    <h4 class="section-title">Showcookings publicados</h4>
+    <div class="profile-grid-cards">
+      {% for item in showcookings %}
+      <article class="content-card">
+        <div class="content-card__media">
+          {% if item.imagen %}<img src="{{ item.imagen.url }}" alt="{{ item.titulo }}">{% endif %}
+        </div>
+        <div class="content-card__body">
+          <h6>{{ item.titulo }}</h6>
+          <p>{{ item.descripcion|default:"Sin descripcion"|truncatewords:16 }}</p>
+        </div>
+      </article>
+      {% empty %}
+      <p class="text-muted">Este usuario aun no tiene showcookings publicados.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="profile-shell">
+    <h4 class="section-title">Recetas publicadas</h4>
+    <div class="profile-grid-cards">
+      {% for item in recetas %}
+      <article class="content-card">
+        <div class="content-card__media">
+          {% if item.imagen %}<img src="{{ item.imagen.url }}" alt="{{ item.titulo }}">{% endif %}
+        </div>
+        <div class="content-card__body">
+          <h6>{{ item.titulo }}</h6>
+          <p>{{ item.descripcion|default:"Sin descripcion"|truncatewords:16 }}</p>
+        </div>
+      </article>
+      {% empty %}
+      <p class="text-muted">Este usuario aun no tiene recetas publicadas.</p>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock content %}

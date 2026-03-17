@@ -1,0 +1,172 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/user-profile.css' %}">
+<link rel="stylesheet" href="{% static 'css/user-profile-responsive.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="user-profile user-profile--private">
+  <section class="profile-shell profile-shell--hero">
+    <div class="profile-header">
+      <div class="profile-avatar-wrap">
+        {% if profile_image_url %}
+          <img class="profile-avatar" src="{{ profile_image_url }}" alt="Foto de perfil">
+        {% else %}
+          <div class="profile-avatar-fallback {{ profile_avatar_class }}">{{ profile_initial }}</div>
+        {% endif %}
+      </div>
+
+      <div class="profile-meta">
+        <p class="subhead mb-1">Tu espacio personal</p>
+        <h2>{{ user.username }}</h2>
+        <span class="profile-role">{{ role_label }}</span>
+        <p>Te uniste el {{ user.date_joined|date:"d/m/Y H:i" }}</p>
+        <a class="btn btn-sm btn-outline-dark" href="{{ public_profile_url }}">Ver perfil publico</a>
+      </div>
+    </div>
+
+    <div class="profile-stats-grid">
+      {% for s in stats %}
+      <article class="profile-stat-card">
+        <small>{{ s.label }}</small>
+        <strong>{{ s.value }}</strong>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="profile-shell">
+    <h4 class="section-title">Editar perfil</h4>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="row g-3">
+        <div class="col-md-6">{{ user_form.username.label_tag }}{{ user_form.username }}</div>
+        <div class="col-md-6">{{ user_form.email.label_tag }}{{ user_form.email }}</div>
+        <div class="col-md-6">{{ user_form.first_name.label_tag }}{{ user_form.first_name }}</div>
+        <div class="col-md-6">{{ user_form.last_name.label_tag }}{{ user_form.last_name }}</div>
+
+        {% for f in chef_fields %}
+          <div class="col-md-6">
+            <label class="form-label">{{ f.label }}</label>
+            {% if f.type == 'file' %}
+              <input type="file" name="{{ f.name }}" class="form-control">
+            {% elif f.type == 'checkbox' %}
+              <div><input type="checkbox" name="{{ f.name }}" {% if f.value %}checked{% endif %}></div>
+            {% else %}
+              <input type="{{ f.type }}" name="{{ f.name }}" class="form-control" value="{{ f.value|default:'' }}">
+            {% endif %}
+          </div>
+        {% endfor %}
+
+        <div class="col-12">
+          <button class="btn btn-dark" type="submit">Guardar cambios</button>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  {% if is_admin %}
+  <section class="profile-shell">
+    <h4 class="section-title">Panel de administracion</h4>
+    <div class="d-flex gap-2 flex-wrap">
+      <a href="/admin/" class="btn btn-outline-secondary">Ir a administracion</a>
+      <a href="{% url 'usuario-dashboard' %}" class="btn btn-primary">Mi perfil</a>
+    </div>
+  </section>
+  {% endif %}
+
+  {% if is_chef %}
+  <section class="profile-shell">
+    <h4 class="section-title">Herramientas de chef</h4>
+    <div class="d-flex gap-2 flex-wrap">
+      <a href="{% url 'usuario-dashboard' %}" class="btn btn-primary">Mi perfil</a>
+      {% if create_showcooking_url %}
+        <a href="{{ create_showcooking_url }}" class="btn btn-outline-dark">Crear showcooking</a>
+      {% endif %}
+    </div>
+  </section>
+  {% endif %}
+
+  <section class="profile-shell">
+    <h4 class="section-title">{% if role == 'registrado' %}Guardados{% else %}Mi contenido{% endif %}</h4>
+
+    <div class="profile-grid-cards">
+      {% for item in showcookings %}
+      <article class="content-card">
+        <div class="content-card__media">
+          {% if item.imagen %}<img src="{{ item.imagen.url }}" alt="{{ item.titulo }}">{% endif %}
+        </div>
+        <div class="content-card__body">
+          <h6>{{ item.titulo }}</h6>
+          <p>{{ item.descripcion|default:"Sin descripcion"|truncatewords:16 }}</p>
+        </div>
+      </article>
+      {% empty %}
+      <p class="text-muted">Sin showcookings para mostrar.</p>
+      {% endfor %}
+    </div>
+
+    <hr>
+
+    <div class="profile-grid-cards">
+      {% for item in recetas %}
+      <article class="content-card">
+        <div class="content-card__media">
+          {% if item.imagen %}<img src="{{ item.imagen.url }}" alt="{{ item.titulo }}">{% endif %}
+        </div>
+        <div class="content-card__body">
+          <h6>{{ item.titulo }}</h6>
+          <p>{{ item.descripcion|default:"Sin descripcion"|truncatewords:16 }}</p>
+        </div>
+      </article>
+      {% empty %}
+      <p class="text-muted">Sin recetas para mostrar.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="profile-shell">
+    <h4 class="section-title">Mis guardados</h4>
+
+    <p class="subhead">Showcookings favoritos</p>
+    <div class="profile-grid-cards">
+      {% for item in favorite_showcookings %}
+      <article class="content-card">
+        <div class="content-card__media">
+          {% if item.imagen %}<img src="{{ item.imagen.url }}" alt="{{ item.titulo }}">{% endif %}
+        </div>
+        <div class="content-card__body">
+          <h6>{{ item.titulo }}</h6>
+          <p>{{ item.descripcion|default:"Sin descripcion"|truncatewords:16 }}</p>
+          <a class="btn btn-sm btn-outline-dark mt-2" href="{% url 'detalle_showcooking' item.id %}">Ver</a>
+        </div>
+      </article>
+      {% empty %}
+      <p class="text-muted">Todavia no has guardado ningun showcooking.</p>
+      {% endfor %}
+    </div>
+
+    <hr>
+
+    <p class="subhead">Recetas guardadas</p>
+    <div class="profile-grid-cards">
+      {% for item in saved_recetas %}
+      <article class="content-card">
+        <div class="content-card__media">
+          {% if item.imagen %}<img src="{{ item.imagen.url }}" alt="{{ item.titulo }}">{% endif %}
+        </div>
+        <div class="content-card__body">
+          <h6>{{ item.titulo }}</h6>
+          <p>{{ item.descripcion|default:"Sin descripcion"|truncatewords:16 }}</p>
+          <a class="btn btn-sm btn-outline-dark mt-2" href="{% url 'detalle_receta' item.id %}">Ver</a>
+        </div>
+      </article>
+      {% empty %}
+      <p class="text-muted">Todavia no has guardado ninguna receta.</p>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock content %}
