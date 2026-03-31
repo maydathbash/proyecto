@@ -9,6 +9,7 @@ urlpatterns = [
     path('', views.index, name='core-index'),
     path('recetas/', views.recetas, name='core-recetas'),
     path('cerrar_sesion/', views.cerrar_sesion, name='cerrar_sesion'),
+    path('dashboard-chef/', views.dashboard_chef, name='dashboard_chef'),
 ]
 
 # ESTO ES ESENCIAL PARA DESARROLLO

@@ -1,0 +1,31 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard-chef.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-chef">
+  <h2>Dashboard Chef</h2>
+  {% if chef_obj %}
+    <h4>Showcookings creados por ti:</h4>
+    {% if showcookings %}
+      <ul class="lista-showcookings-chef">
+        {% for show in showcookings %}
+        <li>
+          <a href="{% url 'detalle_showcooking' show.id %}"><strong>{{ show.titulo }}</strong></a>
+          <span class="badge bg-secondary">{{ show.get_publicado_display }}</span>
+          <a href="{% url 'editar_showcooking' show.id %}" class="btn btn-sm btn-outline-primary">Editar</a>
+          <a href="{% url 'crear_receta_para_showcooking' show.id %}" class="btn btn-sm btn-success">Crear receta</a>
+        </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No tienes showcookings creados aún.</p>
+    {% endif %}
+  {% else %}
+    <div class="alert alert-warning">No se encontró tu perfil de chef. Contacta con soporte si crees que es un error.</div>
+  {% endif %}
+</div>
+{% endblock %}

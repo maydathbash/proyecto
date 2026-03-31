@@ -118,6 +118,28 @@ def _is_chef_user(user):
     return rol.strip().lower() in {'chef', 'cocinero'}
 
 
+# Dashboard para chefs: muestra showcookings creados por el chef actual
+from cooking.models import Chef_ShowCooking
+from cuentas.models import Chef
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def dashboard_chef(request):
+    user = request.user
+    # Buscar el objeto Chef asociado al usuario
+    chef_obj = Chef.objects.filter(nombre=user.first_name, apellidos=user.last_name).first()
+    showcookings = []
+    if chef_obj:
+        showcooking_links = Chef_ShowCooking.objects.filter(id_chef=chef_obj)
+        showcookings = [link.id_showcooking for link in showcooking_links]
+
+    contexto = {
+        'showcookings': showcookings,
+        'chef_obj': chef_obj,
+    }
+    return render(request, 'core/dashboard_chef.html', contexto)
+
+
 def _get_create_showcooking_url():
     for name in ('crear_showcooking', 'showcooking-crear', 'crear_show'):
         try:

@@ -2,13 +2,9 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.apps import apps
+from cuentas.models import Rol
 
 User = get_user_model()
-
-TIPO_USUARIO_CHOICES = (
-    ("registrado", "Registrado"),
-    ("chef", "Chef"),
-)
 
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.CharField(
@@ -23,10 +19,11 @@ class CustomUserCreationForm(UserCreationForm):
         required=False,
         widget=forms.EmailInput(attrs={"class": "form-control", "placeholder": "Email"})
     )
-    tipo_usuario = forms.ChoiceField(
-        choices=TIPO_USUARIO_CHOICES,
+    tipo_usuario = forms.ModelChoiceField(
+        queryset=Rol.objects.none(),  # Se asigna correctamente en __init__
         required=True,
-        widget=forms.Select(attrs={"class": "form-control"})
+        widget=forms.Select(attrs={"class": "form-control"}),
+        label="Tipo de usuario"
     )
 
     class Meta:
@@ -35,6 +32,8 @@ class CustomUserCreationForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # Siempre excluye el rol Administrador, incluso tras errores de validación
+        self.fields['tipo_usuario'].queryset = Rol.objects.exclude(nombre_rol__iexact='Administrador')
         for name, field in self.fields.items():
             if name != "tipo_usuario" and "class" not in field.widget.attrs:
                 field.widget.attrs.update({"class": "form-control"})
@@ -42,6 +41,7 @@ class CustomUserCreationForm(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.email = self.cleaned_data.get("email", "")
+        user.tipo_usuario = self.cleaned_data.get("tipo_usuario")
         if commit:
             user.save()
         return user

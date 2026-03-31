@@ -342,7 +342,7 @@ def _save_chef_fields(request, chef):
 
 class UsuarioDashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'cuentas/usuario.html'
-    login_url = 'iniciosesion'
+    login_url = ''
 
     def post(self, request, *args, **kwargs):
         user_form = UserProfileForm(request.POST, instance=request.user)

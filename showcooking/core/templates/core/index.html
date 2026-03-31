@@ -109,6 +109,9 @@
 
         <div class="d-grid gap-2">
           <a href="{% url 'usuario-dashboard' %}" class="btn btn-primary btn-panel">Ir a mi perfil</a>
+            {% if panel_is_chef %}
+            <a href="{% url 'dashboard_chef' %}" class="btn btn-warning btn-panel">Dashboard Chef</a>
+            {% endif %}
           <a href="{% url 'usuario-publico' user.username %}" class="btn btn-outline-dark btn-panel">Ver mi perfil publico</a>
           {% if panel_is_admin %}
           <a href="/admin/" class="btn btn-outline-secondary btn-panel">Panel admin</a>

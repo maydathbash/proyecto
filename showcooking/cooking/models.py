@@ -86,17 +86,17 @@ class Receta(models.Model):
     fecha_publicacion = models.DateTimeField(null=True, blank=True)
     estado = models.CharField(max_length=10, choices=Estado_Receta, default='borrador')
     
-    categoria = models.ForeignKey(Categoria_receta, on_delete=models.SET_NULL, null=True)
+    categoria = models.ForeignKey(Categoria_receta, on_delete=models.SET_NULL, null=True, blank=True)
 
 #probar a ver como funciona el foreignkey
 class Chef_ShowCooking(models.Model):
-    id_showcooking=models.ForeignKey(Showcooking, on_delete=models.CASCADE)
-    id_chef=models.ForeignKey('cuentas.Chef', on_delete=models.CASCADE)
+    id_showcooking=models.ForeignKey(Showcooking, on_delete=models.CASCADE, null=False, blank=False)
+    id_chef=models.ForeignKey('cuentas.Chef', on_delete=models.CASCADE, null=False, blank=False)
     def __str__(self):
         return f"{self.id_chef} -> {self.id_showcooking}"
 class Chef_Recetas(models.Model):
-    id_chef=models.ForeignKey('cuentas.Chef', on_delete=models.CASCADE)
-    id_receta=models.ForeignKey(Receta, on_delete=models.CASCADE)
+    id_chef=models.ForeignKey('cuentas.Chef', on_delete=models.CASCADE, null=False, blank=False)
+    id_receta=models.ForeignKey(Receta, on_delete=models.CASCADE, null=False, blank=False)
 
 class ingredientes(models.Model):
     id=models.AutoField(primary_key=True)
