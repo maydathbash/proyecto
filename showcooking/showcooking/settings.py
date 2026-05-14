@@ -41,10 +41,7 @@ SECRET_KEY = os.getenv(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env_to_bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = env_to_list(
-    'ALLOWED_HOSTS',
-    'localhost,127.0.0.1,.fly.dev',
-)
+ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = env_to_list(
     'CSRF_TRUSTED_ORIGINS',
