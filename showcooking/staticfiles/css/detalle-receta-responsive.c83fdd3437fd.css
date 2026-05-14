@@ -1,0 +1,54 @@
+@media (max-width: 1200px) {
+  .detalle-receta {
+    padding-left: 8vw;
+    padding-right: 8vw;
+  }
+}
+
+@media (max-width: 992px) {
+  .detalle-receta__contenido {
+    grid-template-columns: 1fr;
+  }
+
+  .detalle-receta__interacciones {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-imagen,
+  .detalle-receta__hero {
+    min-height: 320px;
+    height: 320px;
+  }
+}
+
+@media (max-width: 768px) {
+  .detalle-receta {
+    padding: 1.1rem 5vw 0;
+  }
+
+  .hero-capa h1 {
+    font-size: 1.45rem;
+  }
+
+  .opiniones-shell__header,
+  .comentario-composer,
+  .comentario-composer__actions,
+  .item-interaccion--youtube {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .opiniones-shell__contador {
+    justify-self: start;
+  }
+
+  .comentario-composer__avatar-link,
+  .item-avatar-link {
+    margin-bottom: 0.15rem;
+  }
+
+  .opinion-submit-btn,
+  .opinion-login-cta {
+    width: 100%;
+  }
+}

@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Memoria del proyecto ShowCooking</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/entrega.css">
+</head>
+<body>
+    <div class="page-shell">
+        <section class="hero">
+            <p class="eyebrow">Memoria del proyecto web</p>
+            <div class="hero-grid">
+                <div>
+                    <h1>ShowCooking CIFP Cuenca</h1>
+                    <p>
+                        Documento de planificacion y diseno del sitio web ShowCooking, con la definicion del proyecto,
+                        la guia de estilos, las fases del prototipado y el cierre final de la propuesta.
+                    </p>
+                    <div class="toc">
+                        <a href="#proyecto">Proyecto</a>
+                        <a href="#estilos">Guia de estilos</a>
+                        <a href="#prototipo">Prototipado</a>
+                        <a href="#capturas">Capturas</a>
+                        <a href="#asdf">SDFG / ASDF</a>
+                        <a href="#conclusion">Conclusion</a>
+                    </div>
+                </div>
+                <aside class="hero-meta">
+                    <dl>
+                        <div>
+                            <dt>Titulo del proyecto</dt>
+                            <dd>ShowCooking CIFP Cuenca</dd>
+                        </div>
+                        <div>
+                            <dt>Tecnologia base</dt>
+                            <dd>Django, plantillas HTML, CSS, Bootstrap, HTMX</dd>
+                        </div>
+                        <div>
+                            <dt>Publico objetivo</dt>
+                            <dd>Alumnado, profesorado, chefs y usuarios interesados en cocina</dd>
+                        </div>
+                        <div>
+                            <dt>Fecha</dt>
+                            <dd>11 de mayo de 2026</dd>
+                        </div>
+                    </dl>
+                </aside>
+            </div>
+        </section>
+
+        <section class="report-section" id="proyecto">
+            <div class="section-heading">
+                <h2>1. Proyecto de la aplicacion web</h2>
+                <span class="section-tag">Analisis funcional</span>
+            </div>
+            <p class="lead">
+                ShowCooking CIFP Cuenca es una aplicacion web pensada para reunir showcookings, recetas y perfiles de
+                usuario en un mismo entorno. Su finalidad es difundir contenido gastronomico, facilitar la consulta de
+                recetas y ofrecer a los chefs un espacio desde el que publicar y organizar su trabajo.
+            </p>
+            <div class="two-col">
+                <article class="card">
+                    <h3>Objetivos del sitio web</h3>
+                    <ol class="clean-list">
+                        <li>Difundir showcookings publicados por el centro o por chefs vinculados al proyecto.</li>
+                        <li>Permitir consultar recetas detalladas con instrucciones, imagenes y valoraciones.</li>
+                        <li>Facilitar a los chefs un area de gestion para crear showcookings y anadir recetas.</li>
+                        <li>Mejorar la participacion de los usuarios mediante favoritos, guardados y puntuaciones.</li>
+                        <li>Ofrecer una interfaz clara, responsive y centrada en contenido gastronomico audiovisual.</li>
+                    </ol>
+                </article>
+                <article class="card">
+                    <h3>Aspectos adicionales del proyecto</h3>
+                    <ol class="clean-list">
+                        <li>Se usa una estructura modular de apps Django: core, cooking, cuentas e interacciones.</li>
+                        <li>El sistema distingue roles de usuario, con foco especial en el flujo del chef.</li>
+                        <li>La pagina principal incorpora busqueda y bloques de descubrimiento de contenido.</li>
+                        <li>Los contenidos publicados se ordenan por fecha y valoracion media para destacar calidad.</li>
+                        <li>La plataforma se adapta a distintos dispositivos mediante hojas de estilo responsive.</li>
+                    </ol>
+                </article>
+            </div>
+            <div class="three-col" style="margin-top:18px;">
+                <article class="card">
+                    <h3>Funcionalidad: acceso y perfiles</h3>
+                    <ol class="clean-list">
+                        <li>Registro e inicio de sesion de usuarios.</li>
+                        <li>Panel de usuario y perfil publico.</li>
+                        <li>Cierre de sesion y diferenciacion de roles.</li>
+                    </ol>
+                </article>
+                <article class="card">
+                    <h3>Funcionalidad: contenido culinario</h3>
+                    <ol class="clean-list">
+                        <li>Listado principal de showcookings publicados.</li>
+                        <li>Detalle de showcooking con video de YouTube embebido.</li>
+                        <li>Listado y detalle de recetas publicadas.</li>
+                    </ol>
+                </article>
+                <article class="card">
+                    <h3>Funcionalidad: interaccion</h3>
+                    <ol class="clean-list">
+                        <li>Valoraciones de 1 a 5 estrellas en recetas y showcookings.</li>
+                        <li>Guardado de recetas para consulta posterior.</li>
+                        <li>Marcado de showcookings favoritos.</li>
+                    </ol>
+                </article>
+            </div>
+        </section>
+
+        <section class="report-section" id="estilos">
+            <div class="section-heading">
+                <h2>Guia de estilos del sitio web</h2>
+                <span class="section-tag">Sistema visual</span>
+            </div>
+            <p class="lead">
+                La guia toma como referencia la identidad visual ya presente en la base del proyecto: naranja como
+                color principal, grises suaves para apoyo, blanco para areas de lectura y tipografia de impacto para
+                titulos. La intencion es transmitir cercania, energia y contexto gastronomico.
+            </p>
+
+            <div class="subsection">
+                <h3>Colores del sitio web</h3>
+                <div class="swatch-grid">
+                    <div class="swatch">
+                        <div class="swatch-color" style="background:#E86B1C;"></div>
+                        <div class="swatch-body">
+                            <strong>Naranja principal</strong>
+                            <span>Color de accion, botones, cabeceras y acentos.</span>
+                            <code>#E86B1C</code>
+                        </div>
+                    </div>
+                    <div class="swatch">
+                        <div class="swatch-color" style="background:#F8F9FB;"></div>
+                        <div class="swatch-body">
+                            <strong>Gris claro</strong>
+                            <span>Fondos neutros, bloques informativos y zonas de descanso visual.</span>
+                            <code>#F8F9FB</code>
+                        </div>
+                    </div>
+                    <div class="swatch">
+                        <div class="swatch-color" style="background:#9A9AA8;"></div>
+                        <div class="swatch-body">
+                            <strong>Gris soporte</strong>
+                            <span>Cabeceras secundarias, bordes y ayudas visuales.</span>
+                            <code>#9A9AA8</code>
+                        </div>
+                    </div>
+                    <div class="swatch">
+                        <div class="swatch-color" style="background:#2D6A4F;"></div>
+                        <div class="swatch-body">
+                            <strong>Verde adicional</strong>
+                            <span>Estado positivo, avisos suaves y componente visual extra en CSS.</span>
+                            <code>#2D6A4F</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="two-col" style="margin-top:18px;">
+                <article class="font-sample">
+                    <p class="font-display">ShowCooking</p>
+                    <p class="font-body">
+                        Tipografia principal para titulos: Bungee. Se usa en cabeceras, nombres de seccion y llamadas
+                        visuales porque aporta un tono reconocible, expresivo y joven.
+                    </p>
+                </article>
+                <article class="font-sample">
+                    <p class="font-body" style="font-size:1.08rem;">
+                        Tipografia secundaria para contenido: familia sans serif del sistema. Se prioriza legibilidad
+                        en formularios, descripciones, instrucciones de recetas, comentarios y textos de apoyo.
+                    </p>
+                    <p class="font-body">
+                        Jerarquia propuesta: H1 muy expresivo, H2 robusto, texto base entre 16 y 18 px, contrastes
+                        altos y espaciado amplio para lectura rapida en movil.
+                    </p>
+                </article>
+            </div>
+
+            <div class="two-col" style="margin-top:18px;">
+                <article class="card">
+                    <h3>Iconografia y logotipos</h3>
+                    <div class="icon-row">
+                        <span class="icon-chip"><span class="icon-mark">★</span> Valoraciones</span>
+                        <span class="icon-chip"><span class="icon-mark">❤</span> Favoritos</span>
+                        <span class="icon-chip"><span class="icon-mark">▶</span> Video</span>
+                        <span class="icon-chip"><span class="icon-mark">👨</span> Chef</span>
+                    </div>
+                    <p>
+                        El sitio mantiene el logotipo institucional del CIFP y puede ampliarse con una marca derivada
+                        de ShowCooking para usarla en favicon, portada y piezas promocionales.
+                    </p>
+                </article>
+                <article class="card">
+                    <h3>Mapa de navegacion del sitio web</h3>
+                    <div class="nav-map">
+                        <div class="nav-row">
+                            <div class="nav-node"><strong>Inicio</strong><p>Buscador, destacados y acceso.</p></div>
+                            <div class="nav-node"><strong>Recetas</strong><p>Listado publico de recetas publicadas.</p></div>
+                            <div class="nav-node"><strong>Login / Registro</strong><p>Entrada al sistema y alta.</p></div>
+                            <div class="nav-node"><strong>Perfil</strong><p>Panel propio y perfil publico.</p></div>
+                        </div>
+                        <div class="arrow-line"></div>
+                        <div class="nav-row">
+                            <div class="nav-node"><strong>Detalle showcooking</strong><p>Video, descripcion, valoracion y favoritos.</p></div>
+                            <div class="nav-node"><strong>Detalle receta</strong><p>Imagen, instrucciones, guardado y valoracion.</p></div>
+                            <div class="nav-node"><strong>Dashboard chef</strong><p>Gestion de eventos y recetas.</p></div>
+                            <div class="nav-node"><strong>Crear contenido</strong><p>Alta de showcooking y recetas asociadas.</p></div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="report-section" id="prototipo">
+            <div class="section-heading">
+                <h2>2. Prototipo de la aplicacion web</h2>
+                <span class="section-tag">Proceso de diseno</span>
+            </div>
+            <p class="lead">
+                El proceso de prototipado se divide en cuatro fases. En cada una de ellas se concreta el numero de
+                pantallas, la funcion de cada vista y los elementos principales que tendra la interfaz antes de pasar
+                a la implementacion definitiva.
+            </p>
+            <div class="stage-grid">
+                <article class="stage-card">
+                    <h3>Boceto (sketch)</h3>
+                    <p>
+                        Se definen 6 pantallas principales: inicio, listado de recetas, detalle de showcooking,
+                        detalle de receta, login/registro y dashboard del chef. En el boceto se marca la estructura
+                        general de cada una: cabecera, menu, zonas de contenido, formularios, bloques multimedia y pie.
+                    </p>
+                    <div class="screen sketch" id="sketch-shot">
+                        <div class="screen-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+                        <div class="screen-body">
+                            <strong>Sketch general</strong>
+                            <div class="ui-nav"></div>
+                            <div class="ui-banner"></div>
+                            <div class="ui-grid">
+                                <div class="ui-column">
+                                    <div class="ui-card"><div class="ui-pill"></div><div class="ui-line"></div><div class="ui-line"></div></div>
+                                    <div class="ui-card"><div class="ui-line"></div><div class="ui-line"></div></div>
+                                </div>
+                                <div class="ui-column">
+                                    <div class="ui-photo"></div>
+                                    <div class="ui-card"><div class="ui-line"></div><div class="ui-button">Boton</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <article class="stage-card">
+                    <h3>Esquema (wireframe)</h3>
+                    <p>
+                        El wireframe ordena visualmente cada pagina y fija la posicion del buscador, las tarjetas, los
+                        formularios y las llamadas a la accion. Para esta fase resulta adecuado usar Figma o Penpot,
+                        ya que permiten revisar la jerarquia visual y la navegacion antes de preparar la maqueta final.
+                    </p>
+                    <div class="screen wireframe" id="wireframe-shot">
+                        <div class="screen-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+                        <div class="screen-body">
+                            <strong>Wireframe pagina de inicio</strong>
+                            <div class="ui-nav"></div>
+                            <div class="ui-grid">
+                                <div class="ui-column">
+                                    <div class="ui-banner"></div>
+                                    <div class="ui-card"><div class="ui-line"></div><div class="ui-line"></div><div class="ui-line"></div></div>
+                                </div>
+                                <div class="ui-column">
+                                    <div class="ui-card"><div class="ui-line"></div><div class="ui-line"></div></div>
+                                    <div class="ui-photo"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <article class="stage-card">
+                    <h3>Maqueta (mockup)</h3>
+                    <p>
+                        La maqueta incorpora color, tipografia y recursos visuales. En esta fase se define con mas
+                        precision el aspecto final de la aplicacion, manteniendo la linea cromatica basada en naranja,
+                        blanco y gris y preparando versiones adaptadas a escritorio y movil.
+                    </p>
+                    <div class="screen mockup" id="mockup-shot">
+                        <div class="screen-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+                        <div class="screen-body">
+                            <strong>Mockup visual</strong>
+                            <div class="ui-nav"></div>
+                            <div class="ui-banner"></div>
+                            <div class="ui-grid">
+                                <div class="ui-column">
+                                    <div class="ui-card"><div class="ui-pill"></div><div class="ui-line"></div><div class="ui-line"></div><span class="ui-button">Explorar</span></div>
+                                    <div class="ui-card"><div class="ui-line"></div><div class="ui-line"></div></div>
+                                </div>
+                                <div class="ui-column">
+                                    <div class="ui-photo"></div>
+                                    <div class="ui-card"><div class="ui-line"></div><div class="ui-line"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <article class="stage-card">
+                    <h3>Prototipo navegable</h3>
+                    <p>
+                        El prototipo recoge el flujo principal de uso de la aplicacion: acceso desde inicio, consulta
+                        de recetas, entrada al detalle de showcookings, identificacion de usuarios y gestion del area de
+                        chef. De este modo se puede comprobar la coherencia general del sitio antes de su desarrollo
+                        completo.
+                    </p>
+                    <div class="screen prototype" id="prototype-shot">
+                        <div class="screen-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+                        <div class="screen-body">
+                            <strong>Prototipo funcional</strong>
+                            <div class="ui-nav"></div>
+                            <div class="ui-banner"></div>
+                            <div class="ui-grid">
+                                <div class="ui-column">
+                                    <div class="ui-card"><div class="ui-pill"></div><div class="ui-line"></div><div class="ui-line"></div><span class="ui-button">Ver showcookings</span></div>
+                                    <div class="ui-card"><div class="ui-line"></div><div class="ui-line"></div><div class="ui-line"></div></div>
+                                </div>
+                                <div class="ui-column">
+                                    <div class="ui-photo"></div>
+                                    <div class="ui-card"><div class="ui-line"></div><div class="ui-line"></div><span class="ui-button">Iniciar sesion</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            <div class="note-box" style="margin-top:18px;">
+                <h3>Pantallas incluidas y funcion de cada una</h3>
+                <ol class="clean-list">
+                    <li>Inicio: destacar contenido, buscar y conducir al usuario hacia recetas o showcookings.</li>
+                    <li>Recetas: listar recetas publicadas con acceso a su detalle.</li>
+                    <li>Detalle de showcooking: mostrar video, chef, descripcion, recetas ligadas y valoraciones.</li>
+                    <li>Detalle de receta: mostrar imagen, descripcion, instrucciones y acciones de guardado.</li>
+                    <li>Login y registro: autenticar usuarios y permitir alta.</li>
+                    <li>Dashboard chef: gestionar showcookings propios y crear nuevo contenido.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="report-section" id="capturas">
+            <div class="section-heading">
+                <h2>Capturas del documento</h2>
+                <span class="section-tag">Evidencias visuales</span>
+            </div>
+            <p class="lead">
+                En este apartado se incluyen las capturas correspondientes a cada fase del prototipado, con el fin de
+                dejar constancia visual del trabajo realizado y reunir todas las evidencias dentro del mismo documento.
+            </p>
+            <div class="capture-grid">
+                <article class="capture-card">
+                    <h3>Captura del boceto</h3>
+                    <p>Vista estructural inicial con distribucion general de bloques, menu, tarjetas y CTA.</p>
+                    <img src="./assets/sketch-capture.png" alt="Captura del boceto del proyecto ShowCooking">
+                </article>
+                <article class="capture-card">
+                    <h3>Captura del wireframe</h3>
+                    <p>Esquema de baja fidelidad para validar jerarquia visual y ubicacion de elementos.</p>
+                    <img src="./assets/wireframe-capture.png" alt="Captura del wireframe del proyecto ShowCooking">
+                </article>
+                <article class="capture-card">
+                    <h3>Captura del mockup</h3>
+                    <p>Propuesta visual con color, tipografia y composicion afines al tono gastronomico del sitio.</p>
+                    <img src="./assets/mockup-capture.png" alt="Captura del mockup del proyecto ShowCooking">
+                </article>
+                <article class="capture-card">
+                    <h3>Captura del prototipo</h3>
+                    <p>Representacion del flujo funcional final que conecta con la aplicacion Django existente.</p>
+                    <img src="./assets/prototype-capture.png" alt="Captura del prototipo del proyecto ShowCooking">
+                </article>
+            </div>
+        </section>
+
+        <section class="report-section" id="asdf">
+            <div class="section-heading">
+                <h2>3. SDFG / ASDF</h2>
+                <span class="section-tag">Ampliacion CSS</span>
+            </div>
+            <p class="lead">
+                En este apartado se incorpora un recurso adicional dentro de la hoja de estilos, pensado para ampliar
+                el diseno visual del documento y demostrar la aplicacion de un componente CSS propio enlazado desde la
+                cabecera.
+            </p>
+            <div class="two-col">
+                <article class="asdf-panel">
+                    <h3>Desarrollo del apartado</h3>
+                    <ol class="clean-list">
+                        <li>Crear un ASDF: se diseña un bloque visual extra para remarcar informacion relevante.</li>
+                        <li>Aplicar ASDF: se incorpora a la hoja entrega.css y se vincula desde la cabecera.</li>
+                        <li>En ASDF: se utiliza un tono verde de apoyo para diferenciarlo del color principal.</li>
+                        <li>Para ASDF: se reserva para avisos, mensajes destacados o informacion complementaria.</li>
+                        <li>El ASDFdo: queda representado en un banner reutilizable con degradado y sombra.</li>
+                    </ol>
+                    <div class="asdf-banner">
+                        Banner CSS adicional pensado para avisos, recordatorios o mensajes destacados.
+                    </div>
+                </article>
+                <article class="asdf-panel">
+                    <h3>Importacion de la hoja de estilos</h3>
+                    <p>
+                        La hoja de estilos se importa mediante un enlace dentro de la cabecera del documento HTML. De
+                        esta forma, el diseno queda centralizado en un archivo CSS externo y el documento puede verse o
+                        imprimirse manteniendo el mismo estilo.
+                    </p>
+                    <div class="note-box">
+                        <p>
+                            Enlace utilizado: ./assets/entrega.css
+                        </p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="report-section" id="conclusion">
+            <div class="section-heading">
+                <h2>Conclusion</h2>
+                <span class="section-tag">Cierre</span>
+            </div>
+            <p class="lead">
+                El proyecto ShowCooking presenta una propuesta coherente tanto a nivel funcional como visual. La idea
+                principal del sitio queda bien definida, las secciones responden a necesidades reales del usuario y la
+                estructura de navegacion facilita el acceso a showcookings, recetas y perfiles. Ademas, la guia de
+                estilos y el prototipado permiten concretar la linea grafica del sitio y sirven como base para seguir
+                desarrollando la aplicacion de forma ordenada.
+            </p>
+            <p class="footer-note">
+                Trabajo de planificacion, diseno y documentacion del proyecto web ShowCooking.
+            </p>
+        </section>
+    </div>
+</body>
+</html>

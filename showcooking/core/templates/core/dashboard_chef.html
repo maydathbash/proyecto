@@ -14,15 +14,38 @@
       <ul class="lista-showcookings-chef">
         {% for show in showcookings %}
         <li>
-          <a href="{% url 'detalle_showcooking' show.id %}"><strong>{{ show.titulo }}</strong></a>
+          <div class="showcooking-chef__principal">
+            <a href="{% url 'detalle_showcooking' show.id %}"><strong>{{ show.titulo }}</strong></a>
+            <small class="showcooking-chef__visitas">{{ show.visitas }} visita{{ show.visitas|pluralize }}</small>
+          </div>
           <span class="badge bg-secondary">{{ show.get_publicado_display }}</span>
-          <a href="{% url 'editar_showcooking' show.id %}" class="btn btn-sm btn-outline-primary">Editar</a>
-          <a href="{% url 'crear_receta_para_showcooking' show.id %}" class="btn btn-sm btn-success">Crear receta</a>
+          <a href="{% url 'editar_showcooking' show.id %}" class="btn btn-sm btn-outline-secondary">Modificar</a>
+          <a href="{% url 'detalle_showcooking' show.id %}" class="btn btn-sm btn-outline-primary">Ver detalle</a>
+          <a href="{% url 'crear_receta_showcooking' show.id %}" class="btn btn-sm btn-success">Crear receta</a>
         </li>
         {% endfor %}
       </ul>
     {% else %}
       <p>No tienes showcookings creados aún.</p>
+    {% endif %}
+
+    <h4 class="mt-4">Recetas creadas por ti:</h4>
+    {% if recetas %}
+      <ul class="lista-showcookings-chef">
+        {% for receta in recetas %}
+        <li>
+          <div class="showcooking-chef__principal">
+            <a href="{% url 'detalle_receta' receta.id %}"><strong>{{ receta.titulo }}</strong></a>
+            <small class="showcooking-chef__visitas">{{ receta.showcooking.titulo }}</small>
+          </div>
+          <span class="badge bg-secondary">{{ receta.get_estado_display }}</span>
+          <a href="{% url 'editar_receta' receta.id %}" class="btn btn-sm btn-outline-secondary">Modificar receta</a>
+          <a href="{% url 'detalle_receta' receta.id %}" class="btn btn-sm btn-outline-primary">Ver detalle</a>
+        </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No has creado recetas aún.</p>
     {% endif %}
   {% else %}
     <div class="alert alert-warning">No se encontró tu perfil de chef. Contacta con soporte si crees que es un error.</div>

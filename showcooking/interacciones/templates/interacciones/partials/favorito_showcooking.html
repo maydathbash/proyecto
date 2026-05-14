@@ -1,0 +1,22 @@
+<form
+  method="post"
+  action="{% url 'toggle-favorito-showcooking' showcooking.id %}"
+  class="accion-favorito-form"
+  hx-post="{% url 'toggle-favorito-showcooking' showcooking.id %}"
+  hx-target="this"
+  hx-swap="outerHTML"
+>
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.path }}">
+  {% if is_favorite %}
+  <button class="accion-favorito accion-favorito--activo" type="submit">
+    <span class="accion-favorito__icon">♥</span>
+    <span>En favoritos</span>
+  </button>
+  {% else %}
+  <button class="accion-favorito" type="submit">
+    <span class="accion-favorito__icon">♡</span>
+    <span>Anadir a favoritos</span>
+  </button>
+  {% endif %}
+</form>

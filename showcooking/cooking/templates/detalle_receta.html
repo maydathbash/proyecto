@@ -8,6 +8,9 @@
 
 {% block content %}
 <div class="detalle-receta">
+  {% if es_admin and receta.oculto %}
+  <div class="admin-aviso-oculto">Receta oculta — solo visible para administradores.</div>
+  {% endif %}
   <section class="detalle-receta__hero" aria-label="Cabecera de receta">
     {% if receta.imagen %}
     <img src="{{ receta.imagen.url }}" alt="Imagen principal de {{ receta.titulo }}" class="hero-imagen">
@@ -17,7 +20,7 @@
       <h1>{{ receta.titulo }}</h1>
       <p>{{ receta.descripcion|truncatewords:24 }}</p>
       <div class="hero-metas">
-        <span class="meta-pill">Autor: {{ receta.autor.username }}</span>
+        <span class="meta-pill">Autor: <a class="meta-pill__link" href="{{ receta.url_perfil_autor }}">{{ receta.autor.username }}</a></span>
         <span class="meta-pill">Estado: {{ receta.estado|title }}</span>
         <span class="meta-pill">{{ receta.fecha_creacion|date:"d/m/Y" }}</span>
       </div>
@@ -26,101 +29,127 @@
 
   <section class="detalle-receta__contenido">
     <article class="detalle-card">
-      <h2>Descripcion</h2>
-      <p>{{ receta.descripcion }}</p>
+      <div class="descripcion-bloque">
+        <div class="descripcion-bloque__texto">
+          <p>{{ receta.descripcion|linebreaksbr }}</p>
+        </div>
+      </div>
 
-      <h3 class="mt-3">Instrucciones</h3>
+      {% if receta.ingredientes_agrupados %}
+      <section class="ingredientes-bloque">
+        <h3>Ingredientes</h3>
+        <div class="ingredientes-grupos">
+          {% for grupo in receta.ingredientes_agrupados %}
+          <section class="ingredientes-grupo">
+            <h4>{{ grupo.titulo }}</h4>
+            <ul class="lista-ingredientes">
+              {% for ingrediente in grupo.items %}
+              <li>
+                {% if ingrediente.cantidad %}
+                <span class="lista-ingredientes__cantidad">{{ ingrediente.cantidad }}</span>
+                {% endif %}
+                <span class="lista-ingredientes__nombre">{{ ingrediente.nombre }}</span>
+              </li>
+              {% endfor %}
+            </ul>
+          </section>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+
+      <h3 class="mt-3">Elaboracion</h3>
+      {% if receta.pasos_instrucciones %}
+      <ol class="texto-instrucciones texto-instrucciones--pasos">
+        {% for paso in receta.pasos_instrucciones %}
+        <li>
+          <strong class="texto-instrucciones__titulo">{{ paso.titulo }}</strong>
+          <span class="texto-instrucciones__descripcion">{{ paso.descripcion }}</span>
+        </li>
+        {% endfor %}
+      </ol>
+      {% else %}
       <p class="texto-instrucciones">{{ receta.instrucciones|linebreaksbr }}</p>
+      {% endif %}
     </article>
 
-    <aside class="detalle-card detalle-card--resumen">
-      <h3>Resumen</h3>
-      <p><strong>Categoria:</strong> {% if receta.categoria %}{{ receta.categoria }}{% else %}Sin categoria{% endif %}</p>
-      <p><strong>Valoracion:</strong>
-        <span class="valoracion">
-          {% if avg_rating %}{{ avg_rating|floatformat:1 }} / 5{% else %}Sin valoraciones{% endif %}
-        </span>
-      </p>
-      <p><strong>Total valoraciones:</strong> {{ num_valoraciones }}</p>
+    <div class="detalle-receta__sidebar">
+      <aside class="detalle-card detalle-card--resumen">
+        <h3>Resumen</h3>
+        <div class="resumen-grid">
+          <article class="resumen-item resumen-item--destacado">
+            <span class="resumen-item__label">Valoracion media</span>
+            <strong class="resumen-item__value valoracion">{% if avg_rating_stars %}<span class="valoracion-estrellas" aria-label="Valoracion media de {{ avg_rating|floatformat:1 }} sobre 5">{{ avg_rating_stars }}</span>{% else %}Sin valoraciones{% endif %}</strong>
+          </article>
+          <article class="resumen-item">
+            <span class="resumen-item__label">Categoria</span>
+            <strong class="resumen-item__value">{% if receta.categoria %}{{ receta.categoria }}{% else %}Sin categoria{% endif %}</strong>
+          </article>
+          <article class="resumen-item">
+            <span class="resumen-item__label">Opiniones</span>
+            <strong class="resumen-item__value">{{ num_valoraciones }}</strong>
+          </article>
+          <article class="resumen-item resumen-item--full">
+            <span class="resumen-item__label">Showcooking</span>
+            <strong class="resumen-item__value"><a class="resumen-item__link" href="{% url 'detalle_showcooking' receta.showcooking.id %}">{{ receta.showcooking.titulo }}</a></strong>
+          </article>
+        </div>
 
-      <div class="acciones">
-        <a href="{% url 'core-index' %}" class="btn btn-outline-secondary btn-sm">Volver al inicio</a>
-
-        {% if user.is_authenticated %}
-        <form method="post" action="{% url 'toggle-receta-guardada' receta.id %}">
-          {% csrf_token %}
-          <input type="hidden" name="next" value="{{ request.path }}">
-          {% if is_saved %}
-          <button class="btn btn-outline-success btn-sm" type="submit">Quitar de guardadas</button>
+        <div class="acciones">
+          {% if user.is_authenticated %}
+          <form method="post" action="{% url 'toggle-receta-guardada' receta.id %}" class="accion-favorito-form">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            {% if is_saved %}
+            <button class="accion-favorito accion-favorito--activo accion-favorito--guardado" type="submit">
+              <span class="accion-favorito__icon">★</span>
+              <span>Guardada</span>
+            </button>
+            {% else %}
+            <button class="accion-favorito accion-favorito--guardado" type="submit">
+              <span class="accion-favorito__icon">☆</span>
+              <span>Guardar receta</span>
+            </button>
+            {% endif %}
+          </form>
           {% else %}
-          <button class="btn btn-success btn-sm" type="submit">Guardar receta</button>
+          <a href="{% url 'core-index' %}" class="accion-favorito accion-favorito--bloqueado accion-favorito--guardado">★ Inicia sesion para guardar</a>
           {% endif %}
-        </form>
-        {% else %}
-        <a href="{% url 'core-index' %}" class="btn btn-success btn-sm">Inicia sesion para guardar</a>
-        {% endif %}
-      </div>
-    </aside>
+          {% if es_admin %}
+          <form method="post" action="{% url 'admin-ocultar-receta' receta.id %}" class="admin-mod-form">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="admin-mod-btn {% if receta.oculto %}admin-mod-btn--mostrar{% else %}admin-mod-btn--ocultar{% endif %}">
+              {% if receta.oculto %}Mostrar receta{% else %}Ocultar receta{% endif %}
+            </button>
+          </form>
+          {% endif %}
+        </div>
+      </aside>
+
+      <aside class="detalle-card detalle-card--autor">
+        <div class="autor-bloque autor-bloque--resumen">
+          <a class="autor-bloque__perfil" href="{{ receta.url_perfil_autor }}">
+          <div class="autor-bloque__avatar">
+            {% if receta.autor.avatar %}
+            <img src="{{ receta.autor.avatar.url }}" alt="Foto de perfil de {{ receta.autor.username }}">
+            {% else %}
+            <span>{{ receta.autor.username|first|upper }}</span>
+            {% endif %}
+          </div>
+          </a>
+          <div class="autor-bloque__contenido">
+            <p class="autor-bloque__eyebrow">Autor</p>
+            <h3><a class="autor-bloque__nombre" href="{{ receta.url_perfil_autor }}">{{ receta.autor.username }}</a></h3>
+            <a class="autor-bloque__link" href="{% url 'usuario-publico' receta.autor.username %}">Ver perfil del autor</a>
+          </div>
+        </div>
+      </aside>
+    </div>
   </section>
 
   <section class="detalle-receta__interacciones mt-3">
-    <article class="detalle-card">
-      <h3>Tu opinion</h3>
-      <p class="interaccion-subtitulo">Una sola opinion por usuario: estrellas + comentario.</p>
-      {% if user.is_authenticated %}
-      <form method="post" action="{% url 'valorar-receta' receta.id %}" class="form-interaccion">
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ request.path }}">
-        <div class="mb-2">
-          <label class="form-label d-block">Tu puntuacion</label>
-          <div class="star-rating" role="radiogroup" aria-label="Puntuacion de receta">
-            <input type="radio" id="rec-star5" name="puntuacion" value="5" {% if valoracion_usuario_puntuacion == 5 %}checked{% endif %}>
-            <label for="rec-star5" title="5 estrellas">&#9733;</label>
-
-            <input type="radio" id="rec-star4" name="puntuacion" value="4" {% if valoracion_usuario_puntuacion == 4 %}checked{% endif %}>
-            <label for="rec-star4" title="4 estrellas">&#9733;</label>
-
-            <input type="radio" id="rec-star3" name="puntuacion" value="3" {% if valoracion_usuario_puntuacion == 3 %}checked{% endif %}>
-            <label for="rec-star3" title="3 estrellas">&#9733;</label>
-
-            <input type="radio" id="rec-star2" name="puntuacion" value="2" {% if valoracion_usuario_puntuacion == 2 %}checked{% endif %}>
-            <label for="rec-star2" title="2 estrellas">&#9733;</label>
-
-            <input type="radio" id="rec-star1" name="puntuacion" value="1" {% if valoracion_usuario_puntuacion == 1 or not valoracion_usuario_puntuacion %}checked{% endif %}>
-            <label for="rec-star1" title="1 estrella">&#9733;</label>
-          </div>
-        </div>
-        <div class="mb-2">
-          <label class="form-label" for="id_comentario">Tu opinion escrita</label>
-          {{ valoracion_form.comentario }}
-        </div>
-        <button type="submit" class="btn btn-warning btn-sm">Guardar opinion</button>
-      </form>
-      {% else %}
-      <a href="{% url 'login' %}" class="btn btn-warning btn-sm">Inicia sesion para opinar</a>
-      {% endif %}
-
-      <hr>
-      <h4>Opiniones recientes</h4>
-      <div class="lista-interacciones">
-        {% for valoracion in valoraciones %}
-        <article class="item-interaccion">
-          <div class="item-interaccion__head">
-            <span class="item-avatar">{{ valoracion.usuario.username|first|upper }}</span>
-            <p class="item-interaccion__meta"><strong>{{ valoracion.usuario.username }}</strong></p>
-          </div>
-          <p class="linea-estrellas" aria-label="{{ valoracion.puntuacion }} de 5 estrellas">{{ valoracion.estrellas }} <span>{{ valoracion.puntuacion }}/5</span></p>
-          {% if valoracion.comentario %}
-          <p class="item-opinion">{{ valoracion.comentario }}</p>
-          {% else %}
-          <p class="text-muted">Sin comentario escrito.</p>
-          {% endif %}
-        </article>
-        {% empty %}
-        <p class="text-muted">Todavia no hay opiniones.</p>
-        {% endfor %}
-      </div>
-    </article>
+    {% include 'interacciones/partials/opiniones_receta.html' with receta=receta valoracion_form=valoracion_form valoraciones=valoraciones valoracion_usuario_puntuacion=valoracion_usuario_puntuacion num_valoraciones=num_valoraciones %}
   </section>
 </div>
 {% endblock content %}

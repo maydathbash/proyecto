@@ -10,17 +10,27 @@
 <div class="user-profile user-profile--private">
   <section class="profile-shell profile-shell--hero">
     <div class="profile-header">
-      <div class="profile-avatar-wrap">
-        {% if profile_image_url %}
-          <img class="profile-avatar" src="{{ profile_image_url }}" alt="Foto de perfil">
-        {% else %}
-          <div class="profile-avatar-fallback {{ profile_avatar_class }}">{{ profile_initial }}</div>
-        {% endif %}
-      </div>
+      <form method="post" enctype="multipart/form-data" class="profile-avatar-form">
+        {% csrf_token %}
+        <input type="hidden" name="profile_action" value="avatar">
+        <div class="profile-avatar-wrap">
+          <label class="profile-avatar-trigger" for="{{ avatar_form.avatar.id_for_label }}" aria-label="Cambiar foto de perfil">
+            {% if profile_image_url %}
+              <img class="profile-avatar" src="{{ profile_image_url }}" alt="Foto de perfil">
+            {% else %}
+              <div class="profile-avatar-fallback {{ profile_avatar_class }}">{{ profile_initial }}</div>
+            {% endif %}
+            <span class="profile-avatar-overlay" aria-hidden="true">
+              <span class="profile-avatar-overlay__icon">✎</span>
+            </span>
+          </label>
+          {{ avatar_form.avatar }}
+        </div>
+      </form>
 
       <div class="profile-meta">
         <p class="subhead mb-1">Tu espacio personal</p>
-        <h2>{{ user.username }}</h2>
+        <h2><a class="profile-name-link" href="{{ user.url_perfil_publico }}">{{ user.username }}</a></h2>
         <span class="profile-role">{{ role_label }}</span>
         <p>Te uniste el {{ user.date_joined|date:"d/m/Y H:i" }}</p>
         <a class="btn btn-sm btn-outline-dark" href="{{ public_profile_url }}">Ver perfil publico</a>
@@ -46,6 +56,7 @@
         <div class="col-md-6">{{ user_form.email.label_tag }}{{ user_form.email }}</div>
         <div class="col-md-6">{{ user_form.first_name.label_tag }}{{ user_form.first_name }}</div>
         <div class="col-md-6">{{ user_form.last_name.label_tag }}{{ user_form.last_name }}</div>
+        <div class="col-12">{{ user_form.biografia.label_tag }}{{ user_form.biografia }}</div>
 
         {% for f in chef_fields %}
           <div class="col-md-6">
@@ -77,18 +88,6 @@
   </section>
   {% endif %}
 
-  {% if is_chef %}
-  <section class="profile-shell">
-    <h4 class="section-title">Herramientas de chef</h4>
-    <div class="d-flex gap-2 flex-wrap">
-      <a href="{% url 'usuario-dashboard' %}" class="btn btn-primary">Mi perfil</a>
-      {% if create_showcooking_url %}
-        <a href="{{ create_showcooking_url }}" class="btn btn-outline-dark">Crear showcooking</a>
-      {% endif %}
-    </div>
-  </section>
-  {% endif %}
-
   <section class="profile-shell">
     <h4 class="section-title">{% if role == 'registrado' %}Guardados{% else %}Mi contenido{% endif %}</h4>
 
@@ -99,6 +98,18 @@
           {% if item.imagen %}<img src="{{ item.imagen.url }}" alt="{{ item.titulo }}">{% endif %}
         </div>
         <div class="content-card__body">
+          {% if item.chef_creador %}
+          <div class="firma-creador mb-2">
+            {% if item.url_perfil_creador %}<a class="firma-creador__enlace" href="{{ item.url_perfil_creador }}">{% endif %}
+            {% if item.url_avatar_creador %}
+            <img class="firma-creador__avatar firma-creador__avatar--imagen" src="{{ item.url_avatar_creador }}" alt="Foto de {{ item.nombre_creador }}">
+            {% else %}
+            <span class="firma-creador__avatar">{{ item.inicial_creador }}</span>
+            {% endif %}
+            <span class="firma-creador__texto">{{ item.nombre_creador }}</span>
+            {% if item.url_perfil_creador %}</a>{% endif %}
+          </div>
+          {% endif %}
           <h6>{{ item.titulo }}</h6>
           <p>{{ item.descripcion|default:"Sin descripcion"|truncatewords:16 }}</p>
         </div>
@@ -117,6 +128,16 @@
           {% if item.imagen %}<img src="{{ item.imagen.url }}" alt="{{ item.titulo }}">{% endif %}
         </div>
         <div class="content-card__body">
+          <div class="firma-creador mb-2">
+            <a class="firma-creador__enlace" href="{{ item.url_perfil_autor }}">
+            {% if item.url_avatar_autor %}
+            <img class="firma-creador__avatar firma-creador__avatar--imagen" src="{{ item.url_avatar_autor }}" alt="Foto de perfil de {{ item.autor.username }}">
+            {% else %}
+            <span class="firma-creador__avatar">{{ item.inicial_autor }}</span>
+            {% endif %}
+            <span class="firma-creador__texto">{{ item.autor.username }}</span>
+            </a>
+          </div>
           <h6>{{ item.titulo }}</h6>
           <p>{{ item.descripcion|default:"Sin descripcion"|truncatewords:16 }}</p>
         </div>
@@ -138,6 +159,18 @@
           {% if item.imagen %}<img src="{{ item.imagen.url }}" alt="{{ item.titulo }}">{% endif %}
         </div>
         <div class="content-card__body">
+          {% if item.chef_creador %}
+          <div class="firma-creador mb-2">
+            {% if item.url_perfil_creador %}<a class="firma-creador__enlace" href="{{ item.url_perfil_creador }}">{% endif %}
+            {% if item.url_avatar_creador %}
+            <img class="firma-creador__avatar firma-creador__avatar--imagen" src="{{ item.url_avatar_creador }}" alt="Foto de {{ item.nombre_creador }}">
+            {% else %}
+            <span class="firma-creador__avatar">{{ item.inicial_creador }}</span>
+            {% endif %}
+            <span class="firma-creador__texto">{{ item.nombre_creador }}</span>
+            {% if item.url_perfil_creador %}</a>{% endif %}
+          </div>
+          {% endif %}
           <h6>{{ item.titulo }}</h6>
           <p>{{ item.descripcion|default:"Sin descripcion"|truncatewords:16 }}</p>
           <a class="btn btn-sm btn-outline-dark mt-2" href="{% url 'detalle_showcooking' item.id %}">Ver</a>
@@ -158,6 +191,16 @@
           {% if item.imagen %}<img src="{{ item.imagen.url }}" alt="{{ item.titulo }}">{% endif %}
         </div>
         <div class="content-card__body">
+          <div class="firma-creador mb-2">
+            <a class="firma-creador__enlace" href="{{ item.url_perfil_autor }}">
+            {% if item.url_avatar_autor %}
+            <img class="firma-creador__avatar firma-creador__avatar--imagen" src="{{ item.url_avatar_autor }}" alt="Foto de perfil de {{ item.autor.username }}">
+            {% else %}
+            <span class="firma-creador__avatar">{{ item.inicial_autor }}</span>
+            {% endif %}
+            <span class="firma-creador__texto">{{ item.autor.username }}</span>
+            </a>
+          </div>
           <h6>{{ item.titulo }}</h6>
           <p>{{ item.descripcion|default:"Sin descripcion"|truncatewords:16 }}</p>
           <a class="btn btn-sm btn-outline-dark mt-2" href="{% url 'detalle_receta' item.id %}">Ver</a>
@@ -169,4 +212,18 @@
     </div>
   </section>
 </div>
+
+<script>
+  (function () {
+    var avatarInput = document.getElementById('{{ avatar_form.avatar.id_for_label }}');
+    if (!avatarInput) {
+      return;
+    }
+    avatarInput.addEventListener('change', function () {
+      if (avatarInput.files && avatarInput.files.length) {
+        avatarInput.form.submit();
+      }
+    });
+  })();
+</script>
 {% endblock content %}

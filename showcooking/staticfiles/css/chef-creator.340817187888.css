@@ -1,0 +1,201 @@
+.chef-create {
+  padding: 1.5rem 10vw 0;
+}
+
+.chef-create__panel {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.chef-create__panel h2,
+.chef-create__panel h3 {
+  margin-bottom: 0.4rem;
+  color: #2f3439;
+  font-weight: 800;
+}
+
+.chef-create__intro {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.chef-create__eyebrow {
+  margin: 0 0 0.3rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  color: #9a7658;
+  font-weight: 700;
+}
+
+.chef-create__tip {
+  min-width: 220px;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #fff6e8 0%, #ffedd0 100%);
+  border: 1px solid #f0d39a;
+  color: #6f543f;
+}
+
+.chef-create__tip strong {
+  color: #6a4c32;
+}
+
+.chef-form-grid {
+  margin-top: 0.85rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.chef-field label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  color: #5b6574;
+}
+
+.chef-field--destacado label {
+  margin-bottom: 0.5rem;
+}
+
+.chef-field input,
+.chef-field select,
+.chef-field textarea {
+  width: 100%;
+}
+
+.chef-field textarea {
+  resize: vertical;
+}
+
+.chef-help {
+  display: block;
+  margin-top: 0.45rem;
+  color: #7a8592;
+}
+
+.chef-pasos-card {
+  padding: 0.95rem;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #fffdf9 0%, #f9f3ea 100%);
+  border: 1px solid #eddcc7;
+}
+
+.chef-pasos-card textarea {
+  min-height: 220px;
+  border-radius: 12px;
+  border: 1px solid #dcc8af;
+  background: #fffdfb;
+}
+
+.chef-pasos-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.7rem;
+}
+
+.chef-pasos-card__head small {
+  color: #8a735d;
+}
+
+.chef-pasos-card__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.22rem 0.6rem;
+  border-radius: 999px;
+  background: #e8c28f;
+  color: #5f442d;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.chef-field--full {
+  grid-column: 1 / -1;
+}
+
+.chef-list {
+  margin-top: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.chef-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  border: 1px solid #e4e9ef;
+  border-radius: 10px;
+  padding: 0.7rem;
+}
+
+@media (max-width: 900px) {
+  .chef-create {
+    padding: 1rem 5vw 0;
+  }
+
+  .chef-create__intro {
+    flex-direction: column;
+  }
+
+  .chef-create__tip {
+    min-width: 0;
+    max-width: none;
+    width: 100%;
+  }
+
+  .chef-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chef-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 640px) {
+  .chef-create {
+    padding: 1rem 1rem 0;
+  }
+
+  .chef-create__panel {
+    padding: 0.95rem;
+    border-radius: 12px;
+  }
+
+  .chef-field input,
+  .chef-field select,
+  .chef-field textarea,
+  .chef-field .form-control {
+    min-height: 48px;
+  }
+
+  .chef-field textarea,
+  .chef-field .form-control[type='file'] {
+    min-height: auto;
+  }
+
+  .chef-field--full.d-flex {
+    flex-direction: column;
+  }
+
+  .chef-field--full .btn,
+  .chef-item .btn {
+    width: 100%;
+  }
+}

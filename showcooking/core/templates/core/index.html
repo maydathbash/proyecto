@@ -24,17 +24,29 @@
             <div class="row g-3 p-3">
               {% for cooking in mejores_showcookings %}
               <div class="col-md-4">
-                <a href="{% url 'detalle_showcooking' cooking.id %}">
-                  <article class="noticia-card">
-                    <div class="noticia-card__imagen">
+                <article class="noticia-card">
+                  <div class="noticia-card__imagen">
+                    <a href="{% url 'detalle_showcooking' cooking.id %}">
                       <img src="{{ cooking.imagen.url }}" alt="Imagen del showcooking: {{ cooking.titulo }}">
+                    </a>
+                  </div>
+                  <div class="noticia-card__contenido">
+                    {% if cooking.chef_creador %}
+                    <div class="firma-creador firma-creador--compacta mb-2">
+                      {% if cooking.url_perfil_creador %}<a class="firma-creador__enlace" href="{{ cooking.url_perfil_creador }}">{% endif %}
+                      {% if cooking.url_avatar_creador %}
+                      <img class="firma-creador__avatar firma-creador__avatar--imagen" src="{{ cooking.url_avatar_creador }}" alt="Foto de {{ cooking.nombre_creador }}">
+                      {% else %}
+                      <span class="firma-creador__avatar">{{ cooking.inicial_creador }}</span>
+                      {% endif %}
+                      <span class="firma-creador__texto">{{ cooking.nombre_creador }}</span>
+                      {% if cooking.url_perfil_creador %}</a>{% endif %}
                     </div>
-                    <div class="noticia-card__contenido">
-                      <h4>{{ cooking.titulo }}</h4>
-                      <p>{{ cooking.descripcion|truncatewords:20 }}</p>
-                    </div>
-                  </article>
-                </a>
+                    {% endif %}
+                    <h4><a href="{% url 'detalle_showcooking' cooking.id %}" class="text-reset text-decoration-none">{{ cooking.titulo }}</a></h4>
+                    <p>{{ cooking.descripcion|truncatewords:5 }}</p>
+                  </div>
+                </article>
               </div>
               {% empty %}
               <div class="col-12 text-muted">No hay showcookings destacados todavia.</div>
@@ -47,17 +59,29 @@
             <div class="row g-3 p-3">
               {% for cooking in mejores_showcookings2 %}
               <div class="col-md-4">
-                <a href="{% url 'detalle_showcooking' cooking.id %}">
-                  <article class="noticia-card">
-                    <div class="noticia-card__imagen">
+                <article class="noticia-card">
+                  <div class="noticia-card__imagen">
+                    <a href="{% url 'detalle_showcooking' cooking.id %}">
                       <img src="{{ cooking.imagen.url }}" alt="Imagen del showcooking: {{ cooking.titulo }}">
+                    </a>
+                  </div>
+                  <div class="noticia-card__contenido">
+                    {% if cooking.chef_creador %}
+                    <div class="firma-creador firma-creador--compacta mb-2">
+                      {% if cooking.url_perfil_creador %}<a class="firma-creador__enlace" href="{{ cooking.url_perfil_creador }}">{% endif %}
+                      {% if cooking.url_avatar_creador %}
+                      <img class="firma-creador__avatar firma-creador__avatar--imagen" src="{{ cooking.url_avatar_creador }}" alt="Foto de {{ cooking.nombre_creador }}">
+                      {% else %}
+                      <span class="firma-creador__avatar">{{ cooking.inicial_creador }}</span>
+                      {% endif %}
+                      <span class="firma-creador__texto">{{ cooking.nombre_creador }}</span>
+                      {% if cooking.url_perfil_creador %}</a>{% endif %}
                     </div>
-                    <div class="noticia-card__contenido">
-                      <h4>{{ cooking.titulo }}</h4>
-                      <p>{{ cooking.descripcion|truncatewords:20 }}</p>
-                    </div>
-                  </article>
-                </a>
+                    {% endif %}
+                    <h4><a href="{% url 'detalle_showcooking' cooking.id %}" class="text-reset text-decoration-none">{{ cooking.titulo }}</a></h4>
+                    <p>{{ cooking.descripcion|truncatewords:20 }}</p>
+                  </div>
+                </article>
               </div>
               {% endfor %}
             </div>
@@ -72,7 +96,13 @@
       <div class="tarjeta-usuario" role="region" aria-labelledby="titulo-login">
         <h2 id="titulo-login">Iniciar sesion</h2>
 
-        <form method="post" action="{% url 'login' %}" aria-label="formulario de acceso">
+        <div class="login-mobile-actions">
+          <p>En movil abrimos el acceso en una pantalla aparte para que se vea mejor.</p>
+          <a href="{% url 'login' %}" class="btn btn-primary btn-panel">Ir a iniciar sesion</a>
+          <a href="{% url 'registro_usuario' %}" class="btn btn-outline-dark btn-panel">Crear cuenta</a>
+        </div>
+
+        <form method="post" action="{% url 'core-index' %}" aria-label="formulario de acceso" class="login-desktop-form">
           {% csrf_token %}
           <div class="mb-3">
             <label class="etiqueta-campo" for="{{ form.username.id_for_label }}">Usuario</label>
@@ -80,7 +110,7 @@
           </div>
 
           <div class="mb-3">
-            <label class="etiqueta-campo" for="{{ form.password.id_for_label }}">Contrasena</label>
+            <label class="etiqueta-campo" for="{{ form.password.id_for_label }}">Contraseña</label>
             {{ form.password }}
           </div>
 
@@ -94,9 +124,13 @@
       {% else %}
       <div class="tarjeta-usuario" role="region" aria-labelledby="titulo-usuario-logeado">
         <div class="cabecera-usuario">
+          {% if user.avatar %}
+          <img class="avatar-usuario avatar-usuario--imagen" src="{{ user.avatar.url }}" alt="Foto de perfil de {{ user.username }}">
+          {% else %}
           <div class="avatar-usuario">{{ user.username|first|upper }}</div>
+          {% endif %}
           <div>
-            <h2 class="mb-0" id="titulo-usuario-logeado">{{ user.username }}</h2>
+            <h2 class="mb-0" id="titulo-usuario-logeado"><a class="panel-usuario__link" href="{{ user.url_perfil_publico }}">{{ user.username }}</a></h2>
             <small class="text-muted">Sesion iniciada</small>
           </div>
         </div>
@@ -108,7 +142,7 @@
         </div>
 
         <div class="d-grid gap-2">
-          <a href="{% url 'usuario-dashboard' %}" class="btn btn-primary btn-panel">Ir a mi perfil</a>
+          <a href="{% url 'usuario-dashboard' %}" class="btn btn-primary btn-panel">modificar perfil</a>
             {% if panel_is_chef %}
             <a href="{% url 'dashboard_chef' %}" class="btn btn-warning btn-panel">Dashboard Chef</a>
             {% endif %}
@@ -135,6 +169,18 @@
       <ul class="lista-recientes">
         {% for cooking in show %}
         <li>
+          {% if cooking.chef_creador %}
+          <div class="firma-creador firma-creador--compacta">
+            {% if cooking.url_perfil_creador %}<a class="firma-creador__enlace" href="{{ cooking.url_perfil_creador }}">{% endif %}
+            {% if cooking.url_avatar_creador %}
+            <img class="firma-creador__avatar firma-creador__avatar--imagen" src="{{ cooking.url_avatar_creador }}" alt="Foto de {{ cooking.nombre_creador }}">
+            {% else %}
+            <span class="firma-creador__avatar">{{ cooking.inicial_creador }}</span>
+            {% endif %}
+            <span class="firma-creador__texto">{{ cooking.nombre_creador }}</span>
+            {% if cooking.url_perfil_creador %}</a>{% endif %}
+          </div>
+          {% endif %}
           <a href="{% url 'detalle_showcooking' cooking.id %}">{{ cooking.titulo }}</a>
           <small>{{ cooking.fecha_creacion|date:"d/m/Y H:i" }}</small>
         </li>
@@ -162,17 +208,26 @@
           <div class="carousel-inner carrusel-recetas">
             {% for cooking in showcookings_famosos %}
             <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="4000">
-              <a href="{% url 'detalle_showcooking' cooking.id %}">
-              {% if cooking.imagen %}
-              <img src="{{ cooking.imagen.url }}" class="d-block w-100" alt="{{ cooking.titulo }}">
-              {% else %}
-              <div class="sin-recetas">Sin imagen</div>
-              {% endif %}
-              <div class="carousel-caption d-none d-md-block">
-                <h5>{{ cooking.titulo }}</h5>
-                <p>{{ cooking.descripcion|truncatewords:15 }}</p>
-              </div>
-              </a>
+              <article class="show-famoso-card">
+                {% if cooking.imagen %}
+                <a href="{% url 'detalle_showcooking' cooking.id %}" class="show-famoso-card__media">
+                  <img src="{{ cooking.imagen.url }}" class="d-block w-100" alt="{{ cooking.titulo }}">
+                </a>
+                {% else %}
+                <div class="sin-recetas">Sin imagen</div>
+                {% endif %}
+                <div class="show-famoso-card__contenido">
+                  {% if cooking.chef_creador %}
+                  <div class="firma-creador firma-creador--compacta firma-creador--clara mb-2">
+                    {% if cooking.url_perfil_creador %}<a class="firma-creador__enlace" href="{{ cooking.url_perfil_creador }}">{% endif %}
+                    <span class="firma-creador__texto">{{ cooking.nombre_creador }}</span>
+                    {% if cooking.url_perfil_creador %}</a>{% endif %}
+                  </div>
+                  {% endif %}
+                  <h5><a href="{% url 'detalle_showcooking' cooking.id %}" class="show-famoso-card__titulo">{{ cooking.titulo }}</a></h5>
+                  <p>{{ cooking.descripcion|truncatewords:5 }}</p>
+                </div>
+              </article>
             </div>
             {% empty %}
             <div class="carousel-item active">

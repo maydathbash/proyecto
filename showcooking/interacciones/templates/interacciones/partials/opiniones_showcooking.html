@@ -1,0 +1,120 @@
+<article class="detalle-card opiniones-shell" id="opiniones-showcooking-{{ showcooking.id }}">
+  <div class="opiniones-shell__header">
+    <div>
+      <h3>Opiniones</h3>
+    </div>
+    <span class="opiniones-shell__contador">{{ num_valoraciones }} {% if num_valoraciones == 1 %}opinion{% else %}opiniones{% endif %}</span>
+  </div>
+
+  {% if user.is_authenticated %}
+  <form
+    method="post"
+    action="{% url 'valorar-showcooking' showcooking.id %}"
+    class="form-interaccion form-interaccion--youtube"
+    hx-post="{% url 'valorar-showcooking' showcooking.id %}"
+    hx-target="#opiniones-showcooking-{{ showcooking.id }}"
+    hx-swap="outerHTML"
+  >
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ request.path }}">
+
+    {% if feedback_message %}
+    <div class="opinion-feedback opinion-feedback--{{ feedback_kind }}">{{ feedback_message }}</div>
+    {% endif %}
+
+    {% if valoracion_form.non_field_errors %}
+    <div class="opinion-feedback opinion-feedback--error">{{ valoracion_form.non_field_errors|join:', ' }}</div>
+    {% endif %}
+
+    <div class="comentario-composer">
+      <a class="comentario-composer__avatar-link" href="{{ user.url_perfil_publico }}">
+        {% if user.avatar %}
+        <img class="comentario-composer__avatar comentario-composer__avatar--image" src="{{ user.avatar.url }}" alt="Foto de perfil de {{ user.username }}">
+        {% else %}
+        <span class="comentario-composer__avatar">{{ user.username|first|upper }}</span>
+        {% endif %}
+      </a>
+
+      <div class="comentario-composer__body">
+        <label class="form-label d-block comentario-composer__label">Tu valoracion</label>
+        <div class="star-rating" role="radiogroup" aria-label="Puntuacion del showcooking">
+          <input type="radio" id="show-star5" name="puntuacion" value="5" {% if valoracion_usuario_puntuacion == 5 %}checked{% endif %}>
+          <label for="show-star5" title="5 estrellas">&#9733;</label>
+
+          <input type="radio" id="show-star4" name="puntuacion" value="4" {% if valoracion_usuario_puntuacion == 4 %}checked{% endif %}>
+          <label for="show-star4" title="4 estrellas">&#9733;</label>
+
+          <input type="radio" id="show-star3" name="puntuacion" value="3" {% if valoracion_usuario_puntuacion == 3 %}checked{% endif %}>
+          <label for="show-star3" title="3 estrellas">&#9733;</label>
+
+          <input type="radio" id="show-star2" name="puntuacion" value="2" {% if valoracion_usuario_puntuacion == 2 %}checked{% endif %}>
+          <label for="show-star2" title="2 estrellas">&#9733;</label>
+
+          <input type="radio" id="show-star1" name="puntuacion" value="1" {% if valoracion_usuario_puntuacion == 1 or not valoracion_usuario_puntuacion %}checked{% endif %}>
+          <label for="show-star1" title="1 estrella">&#9733;</label>
+        </div>
+        {% if valoracion_form.puntuacion.errors %}
+        <p class="form-error">{{ valoracion_form.puntuacion.errors|join:', ' }}</p>
+        {% endif %}
+
+        <label class="form-label comentario-composer__label" for="id_comentario">Comparte tu opinion</label>
+        {{ valoracion_form.comentario }}
+        {% if valoracion_form.comentario.errors %}
+        <p class="form-error">{{ valoracion_form.comentario.errors|join:', ' }}</p>
+        {% endif %}
+
+        <div class="comentario-composer__actions">
+          <p class="comentario-composer__hint">Solo se guarda una por usuario.</p>
+          <button type="submit" class="opinion-submit-btn">Publicar</button>
+        </div>
+      </div>
+    </div>
+  </form>
+  {% else %}
+  <a href="{% url 'login' %}" class="opinion-login-cta">Inicia sesion para opinar</a>
+  {% endif %}
+
+  <div class="opiniones-lista-header">
+    <h4>Opiniones recientes</h4>
+  </div>
+
+  <div class="lista-interacciones lista-interacciones--youtube">
+    {% for valoracion in valoraciones %}
+    <article class="item-interaccion item-interaccion--youtube {% if valoracion.oculto %}item-interaccion--oculto{% endif %}">
+      <a class="item-avatar-link" href="{{ valoracion.usuario.url_perfil_publico }}">
+        {% if valoracion.usuario.avatar %}
+        <img class="item-avatar item-avatar--image" src="{{ valoracion.usuario.avatar.url }}" alt="Foto de perfil de {{ valoracion.usuario.username }}">
+        {% else %}
+        <span class="item-avatar">{{ valoracion.usuario.username|first|upper }}</span>
+        {% endif %}
+      </a>
+
+      <div class="item-interaccion__contenido">
+        <p class="item-interaccion__meta"><strong><a class="item-interaccion__link" href="{{ valoracion.usuario.url_perfil_publico }}">{{ valoracion.usuario.username }}</a></strong> <span>{{ valoracion.fecha_creacion|date:"d/m/Y" }}</span></p>
+        <p class="linea-estrellas" aria-label="{{ valoracion.puntuacion }} de 5 estrellas">{{ valoracion.estrellas }} <span>{{ valoracion.puntuacion }}/5</span></p>
+        {% if valoracion.comentario %}
+        <p class="item-opinion">{{ valoracion.comentario }}</p>
+        {% else %}
+        <p class="item-opinion item-opinion--muted"></p>
+        {% endif %}
+        {% if es_admin %}
+        <form method="post"
+          action="{% url 'admin-ocultar-opinion-showcooking' valoracion.id %}"
+          class="admin-mod-form"
+          hx-post="{% url 'admin-ocultar-opinion-showcooking' valoracion.id %}"
+          hx-target="#opiniones-showcooking-{{ showcooking.id }}"
+          hx-swap="outerHTML">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.path }}">
+          <button type="submit" class="admin-mod-btn {% if valoracion.oculto %}admin-mod-btn--mostrar{% else %}admin-mod-btn--ocultar{% endif %}">
+            {% if valoracion.oculto %}Mostrar opinion{% else %}Ocultar opinion{% endif %}
+          </button>
+        </form>
+        {% endif %}
+      </div>
+    </article>
+    {% empty %}
+    <p class="opiniones-vacio">Todavia no hay opiniones. Se la primera persona en comentar.</p>
+    {% endfor %}
+  </div>
+</article>

@@ -8,15 +8,33 @@
 {% block content %}
 <div class="chef-create">
   <section class="chef-create__panel">
-    <h2>Anadir receta a: {{ showcooking.titulo }}</h2>
-    <p class="text-muted">Todas las recetas creadas aqui quedaran vinculadas a este showcooking.</p>
+    <h2>{% if modo_edicion %}Modificar receta: {{ receta.titulo }}{% else %}Anadir receta a: {{ showcooking.titulo }}{% endif %}</h2>
+    <p class="text-muted">{% if modo_edicion %}Actualiza esta receta sin perder sus ingredientes ni su elaboracion.{% else %}Todas las recetas creadas aqui quedaran vinculadas a este showcooking.{% endif %}</p>
 
-    <form method="post" enctype="multipart/form-data" class="chef-form-grid">
+    <form method="post" enctype="multipart/form-data" class="chef-form-grid" data-receta-form>
       {% csrf_token %}
       {% for field in form %}
       <div class="chef-field {% if field.name == 'descripcion' or field.name == 'instrucciones' %}chef-field--full{% endif %}">
         {{ field.label_tag }}
+        {% if field.name == 'instrucciones' %}
+        <div class="pasos-editor" data-pasos-editor>
+          {{ field }}
+          <div class="pasos-editor__ui">
+            <div class="pasos-editor__lista" data-pasos-lista></div>
+            <div class="pasos-editor__atajos" data-pasos-atajos>
+              <button class="btn btn-outline-secondary btn-sm" type="button" data-paso-preset="Preparacion">Preparacion</button>
+              <button class="btn btn-outline-secondary btn-sm" type="button" data-paso-preset="Coccion">Coccion</button>
+              <button class="btn btn-outline-secondary btn-sm" type="button" data-paso-preset="Emplatado">Emplatado</button>
+            </div>
+            <button class="btn btn-outline-dark btn-sm pasos-editor__add" type="button" data-add-paso>Anadir paso</button>
+          </div>
+        </div>
+        {% else %}
         {{ field }}
+        {% endif %}
+        {% if field.help_text %}
+          <small class="text-muted">{{ field.help_text }}</small>
+        {% endif %}
         {% if field.name == 'nueva_categoria' %}
           <small class="text-muted">Si escribes una categoria nueva, se creara automaticamente y se asignara a esta receta.</small>
         {% endif %}
@@ -26,28 +44,611 @@
       </div>
       {% endfor %}
 
+      <div class="chef-field chef-field--full">
+        <h3>Ingredientes</h3>
+        <p class="text-muted">Rellena ingrediente y cantidad. Si eliges crear uno nuevo, se abre al instante el campo para escribirlo.</p>
+        {{ ingredient_formset.management_form }}
+        {% if ingredient_formset.non_form_errors %}
+          <small class="text-danger d-block mb-2">{{ ingredient_formset.non_form_errors|striptags }}</small>
+        {% endif %}
+
+        <div class="ingredientes-editor" data-ingredientes-editor>
+          {% for ingrediente_form in ingredient_formset %}
+          <div class="ingrediente-editor__fila" data-ingrediente-row>
+            {% for hidden in ingrediente_form.hidden_fields %}
+              {{ hidden }}
+            {% endfor %}
+
+            <div class="ingrediente-editor__bloque">
+              {{ ingrediente_form.bloque_preparacion.label_tag }}
+              {{ ingrediente_form.bloque_preparacion }}
+              {% if ingrediente_form.bloque_preparacion.errors %}
+                <small class="text-danger">{{ ingrediente_form.bloque_preparacion.errors|striptags }}</small>
+              {% endif %}
+            </div>
+
+            <div class="ingrediente-editor__ingrediente">
+              {{ ingrediente_form.id_ingrediente.label_tag }}
+              <input type="text" class="form-control ingrediente-editor__search" data-ingredient-search placeholder="Buscar ingrediente por nombre">
+              {{ ingrediente_form.id_ingrediente }}
+              <div class="ingrediente-editor__chips" data-ingredient-chips></div>
+              {% if ingrediente_form.id_ingrediente.errors %}
+                <small class="text-danger">{{ ingrediente_form.id_ingrediente.errors|striptags }}</small>
+              {% endif %}
+            </div>
+
+            <div class="ingrediente-editor__acciones">
+              <button class="btn btn-outline-danger btn-sm ingrediente-editor__remove" type="button" data-remove-ingrediente>
+                Quitar
+              </button>
+            </div>
+
+            <div class="ingrediente-editor__nuevo {% if ingrediente_form.nuevo_ingrediente.value or ingrediente_form.nuevo_ingrediente.errors %}ingrediente-editor__nuevo--visible{% endif %}" data-nuevo-ingrediente>
+              {{ ingrediente_form.nuevo_ingrediente.label_tag }}
+              {{ ingrediente_form.nuevo_ingrediente }}
+              {% if ingrediente_form.nuevo_ingrediente.errors %}
+                <small class="text-danger">{{ ingrediente_form.nuevo_ingrediente.errors|striptags }}</small>
+              {% endif %}
+            </div>
+
+            <div class="ingrediente-editor__cantidad">
+              {{ ingrediente_form.cantidad.label_tag }}
+              {{ ingrediente_form.cantidad }}
+              {% if ingrediente_form.cantidad.errors %}
+                <small class="text-danger">{{ ingrediente_form.cantidad.errors|striptags }}</small>
+              {% endif %}
+            </div>
+
+            {% if ingrediente_form.non_field_errors %}
+              <small class="text-danger ingrediente-editor__error">{{ ingrediente_form.non_field_errors|striptags }}</small>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+
+        <template id="ingrediente-empty-form-template">
+          <div class="ingrediente-editor__fila" data-ingrediente-row>
+            {% for hidden in ingredient_formset.empty_form.hidden_fields %}
+              {{ hidden }}
+            {% endfor %}
+
+            <div class="ingrediente-editor__bloque">
+              {{ ingredient_formset.empty_form.bloque_preparacion.label_tag }}
+              {{ ingredient_formset.empty_form.bloque_preparacion }}
+            </div>
+
+            <div class="ingrediente-editor__ingrediente">
+              {{ ingredient_formset.empty_form.id_ingrediente.label_tag }}
+              <input type="text" class="form-control ingrediente-editor__search" data-ingredient-search placeholder="Buscar ingrediente por nombre">
+              {{ ingredient_formset.empty_form.id_ingrediente }}
+              <div class="ingrediente-editor__chips" data-ingredient-chips></div>
+            </div>
+
+            <div class="ingrediente-editor__acciones">
+              <button class="btn btn-outline-danger btn-sm ingrediente-editor__remove" type="button" data-remove-ingrediente>
+                Quitar
+              </button>
+            </div>
+
+            <div class="ingrediente-editor__nuevo" data-nuevo-ingrediente>
+              {{ ingredient_formset.empty_form.nuevo_ingrediente.label_tag }}
+              {{ ingredient_formset.empty_form.nuevo_ingrediente }}
+            </div>
+
+            <div class="ingrediente-editor__cantidad">
+              {{ ingredient_formset.empty_form.cantidad.label_tag }}
+              {{ ingredient_formset.empty_form.cantidad }}
+            </div>
+          </div>
+        </template>
+
+        <div class="ingredientes-editor__footer">
+          <button class="btn btn-dark" type="button" id="anadir-ingrediente-btn">Anadir otro ingrediente</button>
+        </div>
+      </div>
+
       <div class="chef-field--full d-flex gap-2 flex-wrap">
-        <button class="btn btn-dark" type="submit">Guardar receta</button>
+        <button class="btn btn-dark" type="submit">{% if modo_edicion %}Guardar cambios{% else %}Guardar receta{% endif %}</button>
+        {% if modo_edicion %}
+        <a href="{% url 'detalle_receta' receta.id %}" class="btn btn-outline-secondary">Ver detalle de la receta</a>
+        {% else %}
         <a href="{% url 'detalle_showcooking' showcooking.id %}" class="btn btn-outline-secondary">Ver detalle del showcooking</a>
+        {% endif %}
       </div>
     </form>
-  </section>
 
-  <section class="chef-create__panel">
-    <h3>Recetas del showcooking</h3>
-    <div class="chef-list">
-      {% for receta in recetas_del_show %}
-      <article class="chef-item">
+    {% if recetas_del_show %}
+    <div class="chef-list mt-4">
+      <h3>Recetas de este showcooking</h3>
+      {% for item in recetas_del_show %}
+      <div class="chef-item">
         <div>
-          <strong>{{ receta.titulo }}</strong>
-          <p class="mb-0 text-muted">{{ receta.descripcion|truncatewords:18 }}</p>
+          <strong>{{ item.titulo }}</strong>
+          <div class="text-muted small">{{ item.get_estado_display }} · {{ item.fecha_creacion|date:"d/m/Y" }}</div>
         </div>
-        <a href="{% url 'detalle_receta' receta.id %}" class="btn btn-sm btn-outline-dark">Ver</a>
-      </article>
-      {% empty %}
-      <p class="text-muted mb-0">Aun no has anadido recetas a este showcooking.</p>
+        <div class="d-flex gap-2 flex-wrap">
+          <a href="{% url 'detalle_receta' item.id %}" class="btn btn-sm btn-outline-dark">Ver</a>
+          {% if user.is_authenticated and item.autor_id == user.id %}
+          <a href="{% url 'editar_receta' item.id %}" class="btn btn-sm btn-outline-secondary">Modificar</a>
+          {% endif %}
+        </div>
+      </div>
       {% endfor %}
     </div>
+    {% endif %}
+
+    <script>
+      (function () {
+        const editor = document.querySelector('[data-ingredientes-editor]');
+        const recetaForm = document.querySelector('[data-receta-form]');
+        const totalForms = document.querySelector('#id_ingredientes-TOTAL_FORMS');
+        const addButton = document.querySelector('#anadir-ingrediente-btn');
+        const template = document.querySelector('#ingrediente-empty-form-template');
+
+        if (!editor || !recetaForm || !totalForms || !addButton || !template) {
+          return;
+        }
+
+        const createNewValue = '__new__';
+        const typedNewPrefix = '__typed__:';
+        const temporaryIngredients = new Map();
+        const pasosEditor = document.querySelector('[data-pasos-editor]');
+
+        const ensurePlaceholder = (selectField) => {
+          if (!selectField || selectField.querySelector('[data-ingrediente-placeholder]')) {
+            return;
+          }
+
+          const placeholder = document.createElement('option');
+          placeholder.value = '';
+          placeholder.textContent = 'Selecciona un ingrediente';
+          placeholder.hidden = true;
+          placeholder.dataset.ingredientePlaceholder = 'true';
+          selectField.prepend(placeholder);
+
+          if (!selectField.value) {
+            selectField.value = '';
+          }
+        };
+
+        const appendTemporaryOption = (selectField, ingredientName) => {
+          if (!selectField || !ingredientName) {
+            return;
+          }
+
+          const normalized = ingredientName.trim();
+          if (!normalized) {
+            return;
+          }
+
+          const optionValue = `${typedNewPrefix}${normalized}`;
+          const existingOption = Array.from(selectField.options).find((option) => option.value === optionValue);
+          if (existingOption) {
+            existingOption.textContent = normalized;
+            return;
+          }
+
+          const option = document.createElement('option');
+          option.value = optionValue;
+          option.textContent = normalized;
+
+          const createOption = Array.from(selectField.options).find((opt) => opt.value === createNewValue);
+          if (createOption && createOption.nextSibling) {
+            selectField.insertBefore(option, createOption.nextSibling);
+          } else {
+            selectField.appendChild(option);
+          }
+        };
+
+        const syncTemporaryOptions = () => {
+          const selects = editor.querySelectorAll('select[data-ingrediente-select]');
+          selects.forEach((selectField) => {
+            temporaryIngredients.forEach((ingredientName) => {
+              appendTemporaryOption(selectField, ingredientName);
+            });
+          });
+        };
+
+        const registerTemporaryIngredient = (ingredientName, sourceSelect) => {
+          const normalized = ingredientName.trim();
+          if (!normalized) {
+            return;
+          }
+
+          temporaryIngredients.set(normalized.toLowerCase(), normalized);
+          syncTemporaryOptions();
+
+          if (sourceSelect) {
+            sourceSelect.value = `${typedNewPrefix}${normalized}`;
+          }
+        };
+
+        const finalizePendingNewIngredients = () => {
+          editor.querySelectorAll('[data-ingrediente-row]').forEach((row) => {
+            const selectField = row.querySelector('select');
+            const newInput = row.querySelector('[data-nuevo-ingrediente] input');
+            if (!selectField || !newInput) {
+              return;
+            }
+
+            if (selectField.value === createNewValue && newInput.value.trim()) {
+              registerTemporaryIngredient(newInput.value, selectField);
+            }
+          });
+        };
+
+        const initPasosEditor = () => {
+          if (!pasosEditor) {
+            return;
+          }
+
+          const textarea = pasosEditor.querySelector('textarea');
+          const list = pasosEditor.querySelector('[data-pasos-lista]');
+          const addPasoButton = pasosEditor.querySelector('[data-add-paso]');
+
+          if (!textarea || !list || !addPasoButton) {
+            return;
+          }
+
+          textarea.classList.add('pasos-editor__source');
+
+          const syncTextarea = () => {
+            const values = Array.from(list.querySelectorAll('.paso-editor__fila'))
+              .map((row) => {
+                const titleInput = row.querySelector('[data-paso-title]');
+                const bodyInput = row.querySelector('[data-paso-input]');
+                const title = titleInput ? titleInput.value.trim() : '';
+                const body = bodyInput ? bodyInput.value.trim() : '';
+                if (!title && !body) {
+                  return '';
+                }
+                return `${title || 'Paso'} || ${body}`;
+              })
+              .filter(Boolean);
+            textarea.value = values.join('\n');
+          };
+
+          const createPasoRow = (step = {}, focusTarget = 'title') => {
+            const row = document.createElement('div');
+            row.className = 'paso-editor__fila';
+            row.innerHTML = `
+              <span class="paso-editor__indice"></span>
+              <input type="text" class="form-control paso-editor__title" data-paso-title placeholder="Titulo del paso" />
+              <input type="text" class="form-control paso-editor__input" data-paso-input placeholder="Que hay que hacer" />
+              <button type="button" class="btn btn-outline-danger btn-sm paso-editor__remove">Quitar</button>
+            `;
+
+            const titleInput = row.querySelector('[data-paso-title]');
+            const input = row.querySelector('[data-paso-input]');
+            const removeButton = row.querySelector('.paso-editor__remove');
+            titleInput.value = step.titulo || '';
+            input.value = step.descripcion || '';
+
+            titleInput.addEventListener('input', syncTextarea);
+            input.addEventListener('input', syncTextarea);
+            titleInput.addEventListener('keydown', (event) => {
+              if (event.key !== 'Enter') {
+                return;
+              }
+              event.preventDefault();
+              input.focus();
+            });
+            input.addEventListener('keydown', (event) => {
+              if (event.key !== 'Enter') {
+                return;
+              }
+              event.preventDefault();
+              const nextRow = createPasoRow({}, 'title');
+              list.insertBefore(nextRow, row.nextSibling);
+              refreshPasoIndices();
+              syncTextarea();
+            });
+
+            removeButton.addEventListener('click', () => {
+              const rows = list.querySelectorAll('.paso-editor__fila');
+              if (rows.length === 1) {
+                titleInput.value = '';
+                input.value = '';
+                titleInput.focus();
+                syncTextarea();
+                return;
+              }
+              row.remove();
+              refreshPasoIndices();
+              syncTextarea();
+            });
+
+            requestAnimationFrame(() => {
+              if (focusTarget === 'body') {
+                input.focus();
+              } else {
+                titleInput.focus();
+              }
+            });
+
+            const chipsContainer = pasosEditor.querySelector('[data-pasos-atajos]');
+            if (chipsContainer) {
+              chipsContainer.querySelectorAll('[data-paso-preset]').forEach((button) => {
+                button.addEventListener('click', () => {
+                  const nuevaFila = createPasoRow({ titulo: button.dataset.pasoPreset || '' }, 'body');
+                  list.appendChild(nuevaFila);
+                  refreshPasoIndices();
+                  syncTextarea();
+                }, { once: true });
+              });
+            }
+
+            return row;
+          };
+
+          const refreshPasoIndices = () => {
+            list.querySelectorAll('.paso-editor__fila').forEach((row, index) => {
+              const badge = row.querySelector('.paso-editor__indice');
+              if (badge) {
+                badge.textContent = `Paso ${index + 1}`;
+              }
+            });
+          };
+
+          const initialSteps = textarea.value
+            .split('\n')
+            .map((step) => step.trim())
+            .filter(Boolean);
+
+          const stepsToRender = initialSteps.length ? initialSteps.map((step, index) => {
+            if (step.includes('||')) {
+              const [titulo, descripcion] = step.split('||', 2);
+              return {
+                titulo: titulo.trim(),
+                descripcion: (descripcion || '').trim(),
+              };
+            }
+            return {
+              titulo: `Paso ${index + 1}`,
+              descripcion: step,
+            };
+          }) : [{}];
+          stepsToRender.forEach((step) => {
+            list.appendChild(createPasoRow(step));
+          });
+          refreshPasoIndices();
+          syncTextarea();
+
+          addPasoButton.addEventListener('click', () => {
+            list.appendChild(createPasoRow({}, 'title'));
+            refreshPasoIndices();
+            syncTextarea();
+          });
+        };
+
+        const buildIngredientChips = (row, selectField) => {
+          const searchInput = row.querySelector('[data-ingredient-search]');
+          const chipsContainer = row.querySelector('[data-ingredient-chips]');
+          if (!chipsContainer || !selectField) {
+            return;
+          }
+
+          const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+          const matchingOptions = Array.from(selectField.options)
+            .filter((option) => option.value && option.value !== createNewValue)
+            .filter((option) => !query || option.textContent.toLowerCase().includes(query));
+          const hasExactMatch = Boolean(
+            query && matchingOptions.some((option) => option.textContent.trim().toLowerCase() === query)
+          );
+          const options = Array.from(selectField.options)
+            .filter((option) => option.value && option.value !== createNewValue && option.value !== selectField.value)
+            .filter((option) => !query || option.textContent.toLowerCase().includes(query))
+            .slice(0, query ? 8 : 6);
+
+          chipsContainer.innerHTML = '';
+
+          if (!hasExactMatch) {
+            const createButton = document.createElement('button');
+            createButton.type = 'button';
+            createButton.className = 'ingrediente-chip ingrediente-chip--new';
+            createButton.textContent = query ? `Crear "${searchInput.value.trim()}"` : 'Crear nuevo';
+            createButton.addEventListener('click', () => {
+              selectField.value = createNewValue;
+              selectField.dispatchEvent(new Event('change'));
+            });
+            chipsContainer.appendChild(createButton);
+          }
+
+          options.forEach((option) => {
+            const chip = document.createElement('button');
+            chip.type = 'button';
+            chip.className = 'ingrediente-chip';
+            chip.textContent = option.textContent;
+            chip.addEventListener('click', () => {
+              selectField.value = option.value;
+              selectField.dispatchEvent(new Event('change'));
+            });
+            chipsContainer.appendChild(chip);
+          });
+        };
+
+        const focusNextTick = (element) => {
+          if (!element) {
+            return;
+          }
+          requestAnimationFrame(() => element.focus());
+        };
+
+        const addRow = (prefillBlock = '') => {
+          const nextIndex = Number(totalForms.value);
+          const html = template.innerHTML.replaceAll('__prefix__', String(nextIndex));
+          editor.insertAdjacentHTML('beforeend', html);
+          totalForms.value = String(nextIndex + 1);
+          const rows = editor.querySelectorAll('[data-ingrediente-row]');
+          const newRow = rows[rows.length - 1];
+          bindRow(newRow);
+          syncTemporaryOptions();
+          const blockInput = newRow.querySelector('.ingrediente-editor__bloque input');
+          if (blockInput && prefillBlock) {
+            blockInput.value = prefillBlock;
+          }
+          const firstSelect = newRow.querySelector('select');
+          focusNextTick(firstSelect);
+          return newRow;
+        };
+
+        const syncRowState = (row) => {
+          const newField = row.querySelector('[data-nuevo-ingrediente]');
+          const selectField = row.querySelector('select');
+          const searchInput = row.querySelector('[data-ingredient-search]');
+          const newInput = newField ? newField.querySelector('input') : null;
+          if (!newField || !selectField) {
+            return;
+          }
+
+          const visible = selectField.value === createNewValue;
+          newField.classList.toggle('ingrediente-editor__nuevo--visible', visible);
+          if (searchInput) {
+            const selectedOption = selectField.options[selectField.selectedIndex];
+            if (visible) {
+              searchInput.value = '';
+            } else if (selectedOption && selectedOption.value) {
+              searchInput.value = selectedOption.textContent;
+            }
+          }
+          if (!visible && newInput) {
+            newInput.value = '';
+          }
+          buildIngredientChips(row, selectField);
+        };
+
+        const bindRow = (row) => {
+          const removeButton = row.querySelector('[data-remove-ingrediente]');
+          const newField = row.querySelector('[data-nuevo-ingrediente]');
+          const selectField = row.querySelector('select');
+          const searchInput = row.querySelector('[data-ingredient-search]');
+          const newInput = newField ? newField.querySelector('input') : null;
+          const cantidadInput = row.querySelector('.ingrediente-editor__cantidad input');
+          const bloqueInput = row.querySelector('.ingrediente-editor__bloque input');
+          const deleteInput = row.querySelector('input[name$="-DELETE"]');
+          const isExistingRow = row.querySelector('input[name$="-id"]') && row.querySelector('input[name$="-id"]').value;
+
+          ensurePlaceholder(selectField);
+          syncTemporaryOptions();
+          buildIngredientChips(row, selectField);
+
+          if (searchInput && selectField) {
+            searchInput.addEventListener('input', () => {
+              selectField.value = '';
+              buildIngredientChips(row, selectField);
+            });
+
+            searchInput.addEventListener('keydown', (event) => {
+              if (event.key !== 'Enter') {
+                return;
+              }
+              event.preventDefault();
+              const firstSuggestion = row.querySelector('.ingrediente-chip:not(.ingrediente-chip--new)');
+              if (firstSuggestion) {
+                firstSuggestion.click();
+              } else {
+                const createSuggestion = row.querySelector('.ingrediente-chip--new');
+                if (createSuggestion) {
+                  createSuggestion.click();
+                  if (newInput && searchInput.value.trim()) {
+                    newInput.value = searchInput.value.trim();
+                  }
+                }
+              }
+            });
+          }
+
+          if (selectField) {
+            selectField.addEventListener('change', () => {
+              syncRowState(row);
+              if (selectField.value === createNewValue && newInput) {
+                if (searchInput && searchInput.value.trim()) {
+                  newInput.value = searchInput.value.trim();
+                }
+                focusNextTick(newInput);
+              } else if (selectField.value && cantidadInput) {
+                focusNextTick(cantidadInput);
+              }
+            });
+          }
+
+          if (newInput && cantidadInput) {
+            newInput.addEventListener('keydown', (event) => {
+              if (event.key !== 'Enter') {
+                return;
+              }
+              event.preventDefault();
+              if (newInput.value.trim()) {
+                registerTemporaryIngredient(newInput.value, selectField);
+              }
+              focusNextTick(cantidadInput);
+            });
+
+            newInput.addEventListener('blur', () => {
+              if (newInput.value.trim()) {
+                registerTemporaryIngredient(newInput.value, selectField);
+              }
+            });
+          }
+
+          if (cantidadInput) {
+            cantidadInput.addEventListener('keydown', (event) => {
+              if (event.key !== 'Enter') {
+                return;
+              }
+              event.preventDefault();
+              addRow(bloqueInput ? bloqueInput.value.trim() : '');
+            });
+          }
+
+          if (removeButton) {
+            removeButton.addEventListener('click', () => {
+              const rows = editor.querySelectorAll('[data-ingrediente-row]');
+              if (rows.length === 1) {
+                row.querySelectorAll('input, select').forEach((field) => {
+                  if (field.type === 'hidden') {
+                    return;
+                  }
+                  field.value = '';
+                });
+                if (newField) {
+                  newField.classList.remove('ingrediente-editor__nuevo--visible');
+                }
+                ensurePlaceholder(selectField);
+                syncRowState(row);
+                return;
+              }
+              if (isExistingRow && deleteInput) {
+                deleteInput.value = 'on';
+                row.hidden = true;
+                return;
+              }
+              row.remove();
+              totalForms.value = String(editor.querySelectorAll('[data-ingrediente-row]').length);
+            });
+          }
+
+          syncRowState(row);
+        };
+
+        editor.querySelectorAll('[data-ingrediente-row]').forEach(bindRow);
+        initPasosEditor();
+
+        if (!editor.querySelector('[data-ingrediente-row]')) {
+          addRow();
+        }
+
+        recetaForm.addEventListener('submit', () => {
+          finalizePendingNewIngredients();
+        });
+
+        addButton.addEventListener('click', () => {
+          const lastRow = editor.querySelector('[data-ingrediente-row]:last-child');
+          const lastBlock = lastRow ? lastRow.querySelector('.ingrediente-editor__bloque input') : null;
+          addRow(lastBlock ? lastBlock.value.trim() : '');
+        });
+      })();
+    </script>
   </section>
 </div>
 {% endblock content %}

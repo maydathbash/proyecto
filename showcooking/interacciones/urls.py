@@ -9,4 +9,10 @@ urlpatterns = [
 	path('guardada/receta/<int:pk>/toggle/', views.toggle_receta_guardada, name='toggle-receta-guardada'),
 	path('valorar/showcooking/<int:pk>/', views.valorar_showcooking, name='valorar-showcooking'),
 	path('valorar/receta/<int:pk>/', views.valorar_receta, name='valorar-receta'),
+	# Admin: ocultar publicaciones
+	path('admin/ocultar/showcooking/<int:pk>/', views.admin_ocultar_showcooking, name='admin-ocultar-showcooking'),
+	path('admin/ocultar/receta/<int:pk>/', views.admin_ocultar_receta, name='admin-ocultar-receta'),
+	# Admin: ocultar opiniones
+	path('admin/ocultar/opinion/showcooking/<int:pk>/', views.admin_ocultar_opinion_showcooking, name='admin-ocultar-opinion-showcooking'),
+	path('admin/ocultar/opinion/receta/<int:pk>/', views.admin_ocultar_opinion_receta, name='admin-ocultar-opinion-receta'),
 ]

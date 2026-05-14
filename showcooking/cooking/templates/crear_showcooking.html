@@ -8,14 +8,25 @@
 {% block content %}
 <div class="chef-create">
   <section class="chef-create__panel">
-    <h2>Crear nuevo showcooking</h2>
-    <p class="text-muted">Primero creas el showcooking y despues podras anadirle recetas.</p>
+    <h2>{% if modo_edicion %}Modificar showcooking{% else %}Crear nuevo showcooking{% endif %}</h2>
+    <p class="text-muted">
+      {% if modo_edicion %}
+        Puedes actualizar este showcooking aunque este publicado o siga en borrador.
+      {% else %}
+        Primero creas el showcooking y despues podras anadirle recetas.
+      {% endif %}
+    </p>
 
     <form method="post" enctype="multipart/form-data" class="chef-form-grid">
       {% csrf_token %}
       {% for field in form %}
       <div class="chef-field {% if field.name == 'descripcion' %}chef-field--full{% endif %}">
         {{ field.label_tag }}
+        {% if field.name == 'imagen' and modo_edicion and showcooking.imagen %}
+          <div class="mb-3">
+            <img src="{{ showcooking.imagen.url }}" alt="Imagen actual de {{ showcooking.titulo }}" class="img-fluid rounded" style="max-width: 280px; max-height: 180px; object-fit: cover;">
+          </div>
+        {% endif %}
         {{ field }}
         {% if field.name == 'nueva_categoria' %}
           <small class="text-muted">Si escribes aqui, se creara y se usara esta categoria en lugar de la seleccionada.</small>
@@ -27,7 +38,7 @@
       {% endfor %}
 
       <div class="chef-field--full">
-        <button class="btn btn-dark" type="submit">Crear showcooking</button>
+        <button class="btn btn-dark" type="submit">{% if modo_edicion %}Guardar cambios{% else %}Crear showcooking{% endif %}</button>
       </div>
     </form>
   </section>

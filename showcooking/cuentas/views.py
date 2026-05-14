@@ -5,6 +5,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.apps import apps
 from django.urls import reverse, NoReverseMatch
 from django.contrib import messages
+from django.db.models import Prefetch
+from core.models import registrar_inicio_sesion
+from .models import Chef
 
 from .forms import *
 
@@ -21,11 +24,22 @@ AVATAR_COLOR_CLASS_MAP = {
 }
 
 # Create your views here.
+def _obtener_ip_cliente(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        return x_forwarded_for.split(',')[0].strip()
+    return request.META.get('REMOTE_ADDR')
+
+
 def inicio_sesion(request):
     if request.method == 'POST':
         form = CustomAuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
+            try:
+                registrar_inicio_sesion(user, _obtener_ip_cliente(request))
+            except Exception:
+                print("Error al registrar inicio de sesion")
             login(request, user)
             return redirect('core-index')
     else:
@@ -43,6 +57,9 @@ class RegistroUsuarioView(CreateView):
         response = super().form_valid(form)
         username = form.cleaned_data.get('username')
         password = form.cleaned_data.get('password1')
+        rol = getattr(form.cleaned_data.get('tipo_usuario'), 'nombre_rol', '') or ''
+        if rol.strip().lower() in {'chef', 'cocinero'}:
+            Chef.objects.get_or_create(nombre=username[:30], apellidos='')
         user = authenticate(username=username, password=password)
         if user:
             login(self.request, user)
@@ -50,13 +67,28 @@ class RegistroUsuarioView(CreateView):
 
 
 def _get_chef_for_user(user):
-    try:
-        Chef = apps.get_model('cuentas', 'Chef')
-    except LookupError:
+    if not user or not user.is_authenticated:
         return None
 
-    # Chef ya no tiene relacion directa con Usuario.
-    return None
+    rol = getattr(getattr(user, 'tipo_usuario', None), 'nombre_rol', '') or ''
+    if rol.strip().lower() not in {'chef', 'cocinero'}:
+        return None
+
+    nombre = (user.first_name or user.username or '').strip()
+    apellidos = (user.last_name or '').strip()
+
+    if not nombre:
+        return None
+
+    chef = Chef.objects.filter(
+        nombre__iexact=nombre,
+        apellidos__iexact=apellidos,
+    ).first()
+
+    if chef:
+        return chef
+
+    return Chef.objects.create(nombre=nombre[:30], apellidos=apellidos[:80])
 
 
 def _is_admin_user(user):
@@ -75,7 +107,10 @@ def _is_admin_user(user):
 
 
 def _is_chef_user(user):
-    return _get_chef_for_user(user) is not None
+    if not user.is_authenticated:
+        return False
+    rol = getattr(getattr(user, 'tipo_usuario', None), 'nombre_rol', '') or ''
+    return rol.strip().lower() in {'chef', 'cocinero'}
 
 
 def _user_role(user):
@@ -192,7 +227,8 @@ def _get_user_showcookings(user, only_published=False):
         return Showcooking.objects.none()
 
     show_ids = ChefShowcooking.objects.filter(id_chef=chef_obj).values_list('id_showcooking_id', flat=True)
-    qs = Showcooking.objects.filter(id__in=show_ids).distinct()
+    prefetch_chef = Prefetch('chef_showcooking_set', queryset=ChefShowcooking.objects.select_related('id_chef'))
+    qs = Showcooking.objects.filter(id__in=show_ids).prefetch_related(prefetch_chef).distinct()
     if only_published:
         qs = qs.filter(publicado='publicado')
     return _order_recent(qs)
@@ -204,7 +240,7 @@ def _get_user_recetas(user, only_published=False):
     except LookupError:
         return None
 
-    qs = Receta.objects.filter(autor=user)
+    qs = Receta.objects.select_related('autor').filter(autor=user)
     if only_published:
         qs = qs.filter(estado='publicada')
     return _order_recent(qs)
@@ -276,13 +312,13 @@ def _get_user_favorites_and_saved(user):
 
     try:
         FavoritoShowcooking = apps.get_model('interacciones', 'Favorito_showcooking')
-        favoritos_show = [row.showcooking for row in FavoritoShowcooking.objects.select_related('showcooking').filter(usuario=user)]
+        favoritos_show = [row.showcooking for row in FavoritoShowcooking.objects.select_related('showcooking').prefetch_related('showcooking__chef_showcooking_set__id_chef').filter(usuario=user)]
     except Exception:
         favoritos_show = []
 
     try:
         RecetaGuardada = apps.get_model('interacciones', 'RecetaGuardada')
-        recetas_guardadas = [row.receta for row in RecetaGuardada.objects.select_related('receta').filter(usuario=user)]
+        recetas_guardadas = [row.receta for row in RecetaGuardada.objects.select_related('receta__autor').filter(usuario=user)]
     except Exception:
         recetas_guardadas = []
 
@@ -301,7 +337,7 @@ def _get_create_showcooking_url():
 def _editable_chef_fields(chef):
     if not chef:
         return []
-    skip = {'id', 'usuario', 'user', 'fecha_registro', 'fecha_creacion', 'created_at'}
+    skip = {'id', 'usuario', 'user', 'fecha_registro', 'fecha_creacion', 'created_at', 'avatar', 'nombre', 'apellidos'}
     out = []
     for f in chef._meta.fields:
         if f.name in skip:
@@ -340,17 +376,36 @@ def _save_chef_fields(request, chef):
     chef.save()
 
 
+def _sync_chef_identity_from_user(user, chef):
+    if not chef or not user:
+        return
+
+    chef.nombre = (user.first_name or user.username or '').strip()[:30]
+    chef.apellidos = (user.last_name or '').strip()[:80]
+    chef.save(update_fields=['nombre', 'apellidos'])
+
+
 class UsuarioDashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'cuentas/usuario.html'
     login_url = ''
 
     def post(self, request, *args, **kwargs):
-        user_form = UserProfileForm(request.POST, instance=request.user)
+        if request.POST.get('profile_action') == 'avatar':
+            avatar_form = UserAvatarForm(request.POST, request.FILES, instance=request.user)
+            if avatar_form.is_valid():
+                avatar_form.save()
+                messages.success(request, 'Foto de perfil actualizada correctamente.')
+            else:
+                messages.error(request, 'Selecciona una imagen valida para actualizar la foto de perfil.')
+            return redirect('usuario-dashboard')
+
+        user_form = UserProfileForm(request.POST, request.FILES, instance=request.user)
         chef = _get_chef_for_user(request.user)
 
         if user_form.is_valid():
-            user_form.save()
+            user = user_form.save()
             try:
+                _sync_chef_identity_from_user(user, chef)
                 _save_chef_fields(request, chef)
             except Exception:
                 pass
@@ -384,10 +439,11 @@ class UsuarioDashboardView(LoginRequiredMixin, TemplateView):
             'role_label': _role_label(role),
             'is_admin': role == 'admin',
             'is_chef': role == 'chef',
-            'profile_image_url': _get_image_url_from_obj(chef) or _get_image_url_from_obj(user),
+            'profile_image_url': _get_image_url_from_obj(user) or _get_image_url_from_obj(chef),
             'profile_initial': profile_initial,
             'profile_avatar_bg': profile_avatar_bg,
             'profile_avatar_class': profile_avatar_class,
+            'avatar_form': UserAvatarForm(instance=user),
             'user_form': UserProfileForm(instance=user),
             'chef_fields': _editable_chef_fields(chef),
             'showcookings': show_for_panel,
@@ -428,7 +484,7 @@ class UsuarioPublicoView(TemplateView):
             'profile_user': profile_user,
             'role': role,
             'role_label': _role_label(role),
-            'profile_image_url': _get_image_url_from_obj(chef) or _get_image_url_from_obj(profile_user),
+            'profile_image_url': _get_image_url_from_obj(profile_user) or _get_image_url_from_obj(chef),
             'profile_initial': profile_initial,
             'profile_avatar_bg': profile_avatar_bg,
             'profile_avatar_class': profile_avatar_class,

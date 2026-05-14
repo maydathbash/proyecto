@@ -1,0 +1,72 @@
+@media (max-width: 1200px) {
+  .index-home {
+    padding-left: 8vw;
+    padding-right: 8vw;
+  }
+}
+
+@media (max-width: 992px) {
+  .index-home__superior,
+  .index-home__bloques {
+    grid-template-columns: 1fr;
+  }
+
+  .tarjeta-usuario {
+    margin-top: 0.4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .index-home {
+    padding: 1.2rem 5vw 0;
+  }
+
+  .index-home__usuario {
+    display: none;
+  }
+
+  .login-mobile-actions {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .login-mobile-actions p {
+    margin: 0;
+    color: #606b78;
+    line-height: 1.5;
+  }
+
+  .login-mobile-actions .btn {
+    width: 100%;
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .login-desktop-form,
+  .tarjeta-usuario .texto-login {
+    display: none;
+  }
+
+  .noticia-card__imagen,
+  .card-img-wrapper,
+  .carrusel-recetas .carousel-item img,
+  .show-famoso-card,
+  .sin-recetas {
+    height: 220px;
+  }
+
+  .show-famoso-card__contenido {
+    inset: auto 0.75rem 0.75rem 0.75rem;
+    padding: 0.85rem;
+  }
+
+  .form-busqueda-index {
+    flex-direction: column;
+  }
+
+  .form-busqueda-index .btn {
+    width: 100%;
+  }
+}

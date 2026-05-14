@@ -16,7 +16,7 @@ class ValoracionShowcookingForm(forms.ModelForm):
                 attrs={"class": "form-select"},
             ),
             "comentario": forms.Textarea(
-                attrs={"rows": 3, "placeholder": "Opcional: cuentanos tu opinion", "class": "form-control"}
+                attrs={"rows": 3, "placeholder": "Anade un comentario publico sobre este showcooking", "class": "form-control"}
             ),
         }
 
@@ -31,6 +31,6 @@ class ValoracionRecetaForm(forms.ModelForm):
                 attrs={"class": "form-select"},
             ),
             "comentario": forms.Textarea(
-                attrs={"rows": 3, "placeholder": "Comparte tu opinion", "class": "form-control"}
+                attrs={"rows": 3, "placeholder": "Anade un comentario publico sobre esta receta", "class": "form-control"}
             ),
         }

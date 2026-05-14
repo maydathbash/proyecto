@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
+from django.urls import reverse, NoReverseMatch
 import hashlib
 
 class Rol(models.Model):
@@ -40,6 +41,13 @@ class Usuario(AbstractUser):
         idx = int(digest[:8], 16) % len(palette)
         return palette[idx]
 
+    @property
+    def url_perfil_publico(self):
+        try:
+            return reverse('usuario-publico', kwargs={'username': self.username})
+        except NoReverseMatch:
+            return None
+
     def es_admin(self):
         if str(self.tipo_usuario) == "Administrador":
             return True
@@ -59,4 +67,53 @@ class Chef(models.Model):
     def __str__(self):
         full = f"{self.nombre} {self.apellidos}".strip()
         return full or f"Chef {self.id}"
+
+    @property
+    def usuario_vinculado(self):
+        first_name = (self.nombre or '').strip()
+        last_name = (self.apellidos or '').strip()
+        if not first_name:
+            return None
+
+        if last_name:
+            usuario = Usuario.objects.filter(
+                first_name__iexact=first_name,
+                last_name__iexact=last_name,
+            ).first()
+            if usuario:
+                return usuario
+
+        usuario = Usuario.objects.filter(username__iexact=first_name).first()
+        if usuario:
+            return usuario
+
+        return Usuario.objects.filter(first_name__iexact=first_name).first()
+
+    @property
+    def url_avatar_visible(self):
+        usuario = self.usuario_vinculado
+        if usuario and getattr(usuario, 'avatar', None):
+            try:
+                return usuario.avatar.url
+            except Exception:
+                pass
+        if getattr(self, 'avatar', None):
+            try:
+                return self.avatar.url
+            except Exception:
+                pass
+        return None
+
+    @property
+    def inicial_visible(self):
+        usuario = self.usuario_vinculado
+        if usuario and getattr(usuario, 'avatar_initial', None):
+            return usuario.avatar_initial
+        base = (self.nombre or str(self) or 'S').strip()
+        return base[:1].upper() if base else 'S'
+
+    @property
+    def url_perfil_publico(self):
+        usuario = self.usuario_vinculado
+        return usuario.url_perfil_publico if usuario else None
     

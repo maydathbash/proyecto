@@ -26,21 +26,62 @@
         />
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
         {% load static %}
-        <link rel="stylesheet" href="{% static '/css/base.css' %}?v=2.1"/>
-        <link rel="stylesheet" href="{% static '/css/responsive.css' %}">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}?v=2.1"/>
+        <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
         {% block extra_css %}{% endblock %}
         
     </head>
     <body>
         <header role="banner" aria-label="Cabecera principal">
             <div class="grid-tres-columnas responsivo-1-header paddingy">
-                <img src="{% static '/img/cifp.png' %}" class="imagen-nav" alt="Logotipo del centro educativo CIFP Cuenca" aria-hidden="true">
+                <img src="{% static 'img/cifp.png' %}" class="imagen-nav" alt="Logotipo del centro educativo CIFP Cuenca" aria-hidden="true">
                 <h1 class="titulo-nav pt-2 gravitas-one-regular" aria-label="ShowCooking - Plataforma de cocina en directo">ShowCooking</h1>
             </div>
-            <nav class="grid-4-columnas responsivo-2-header fondo-naranja hd-2 paddingy" role="navigation" aria-label="Menú principal">
-                <div class="uno-gr horizontal a-blancos">
+            <nav class="grid-4-columnas responsivo-2-header fondo-naranja hd-2 paddingy main-nav" role="navigation" aria-label="Menú principal">
+                <div class="uno-gr horizontal a-blancos main-nav__links">
                     <a href="{% url 'core-index' %}" class="p" aria-current="page" aria-label="Página de inicio actual">Inicio</a>
                     <a href="{% url 'core-recetas' %}" aria-label="Ver recetas">Recetas</a>
+                </div>
+                <div class="main-nav__actions">
+                    {% if user.is_authenticated %}
+                    {% with user_role=user.tipo_usuario.nombre_rol|default:''|lower %}
+                    <details class="mobile-user-menu">
+                        <summary class="mobile-user-menu__trigger">
+                            {% if user.avatar %}
+                            <img class="mobile-user-menu__avatar mobile-user-menu__avatar--image" src="{{ user.avatar.url }}" alt="Foto de perfil de {{ user.username }}">
+                            {% else %}
+                            <span class="mobile-user-menu__avatar">{{ user.username|first|upper }}</span>
+                            {% endif %}
+                            <span class="mobile-user-menu__name">{{ user.username }}</span>
+                            <span class="mobile-user-menu__caret" aria-hidden="true">▾</span>
+                        </summary>
+                        <div class="mobile-user-menu__panel">
+                            <a href="{% url 'usuario-dashboard' %}">Mi perfil</a>
+                            <a href="{% url 'usuario-publico' user.username %}">Ver perfil publico</a>
+                            {% if user_role == 'chef' or user_role == 'cocinero' %}
+                            <a href="{% url 'dashboard_chef' %}">Dashboard chef</a>
+                            <a href="{% url 'crear_showcooking' %}">Crear showcooking</a>
+                            {% endif %}
+                            {% if user.is_staff or user.is_superuser %}
+                            <a href="/admin/">Panel admin</a>
+                            {% endif %}
+                            <a href="{% url 'cerrar_sesion' %}" class="mobile-user-menu__danger">Cerrar sesion</a>
+                        </div>
+                    </details>
+                    {% endwith %}
+                    {% else %}
+                    <details class="mobile-user-menu">
+                        <summary class="mobile-user-menu__trigger mobile-user-menu__trigger--guest">
+                            <span class="mobile-user-menu__avatar">☰</span>
+                            <span class="mobile-user-menu__name">Cuenta</span>
+                            <span class="mobile-user-menu__caret" aria-hidden="true">▾</span>
+                        </summary>
+                        <div class="mobile-user-menu__panel">
+                            <a href="{% url 'login' %}">Iniciar sesion</a>
+                            <a href="{% url 'registro_usuario' %}">Crear cuenta</a>
+                        </div>
+                    </details>
+                    {% endif %}
                 </div>
             </nav>
         </header>
@@ -58,7 +99,6 @@
             {% block content %}
             {% endblock %}
         </main>
-        <br><br>
 
         <footer class="fondo-gris paddingy" role="contentinfo" aria-label="Pie de página con información institucional">
                 <div class="c pt-4">© 2021 - 2023 CIFP Nº 1 | Fuensanta, 3 - 16002 - Cuenca</div>

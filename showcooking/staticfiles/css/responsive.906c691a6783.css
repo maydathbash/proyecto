@@ -1,0 +1,64 @@
+@media ( max-width:768px ){
+    body{
+        grid-template-areas: 
+        "hd"
+        "mn"
+        "ft";
+        width: 100%;
+    }
+    header,
+    main,
+    footer{
+        min-width: 0;
+    }
+    footer{
+        width: 100%;
+    }
+    .responsivo-1-header{
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+    .imagen-nav{
+        display: none;
+    }
+    .titulo-nav{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    .responsivo-2-header{
+        grid-template-columns: 1fr;
+    }
+    .responsivo-2-header .a-blancos{
+        justify-content: center;
+    }
+    .responsivo-1-main .dos-gr, .responsivo-1-main .tres-gr{
+        display: none;
+    }
+    .responsivo-1-main{
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+    .responsivo-2-main{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 3rem;
+        width: 100%;
+    }
+    .responsivo-2-main .uno-gr{
+        width: 100%;
+        min-width: 0;
+    }
+    .responsivo-2-main .dos-gr{
+        display: none;
+
+    }
+
+    .pic{
+        justify-content: center;
+    }
+
+}

@@ -19,8 +19,10 @@
       </div>
 
       <div class="profile-meta">
-        <p class="subhead mb-1">Perfil publico</p>
-        <h2>{{ profile_user.username }}</h2>
+        <h2><a class="profile-name-link" href="{{ profile_user.url_perfil_publico }}">{{ profile_user.username }}</a></h2>
+        {% if profile_user.biografia %}
+          <p class="mb-2">{{ profile_user.biografia }}</p>
+        {% endif %}
         <span class="profile-role">{{ role_label }}</span>
         <p>Miembro desde {{ profile_user.date_joined|date:"d/m/Y" }}</p>
       </div>
@@ -45,6 +47,18 @@
           {% if item.imagen %}<img src="{{ item.imagen.url }}" alt="{{ item.titulo }}">{% endif %}
         </div>
         <div class="content-card__body">
+          {% if item.chef_creador %}
+          <div class="firma-creador mb-2">
+            {% if item.url_perfil_creador %}<a class="firma-creador__enlace" href="{{ item.url_perfil_creador }}">{% endif %}
+            {% if item.url_avatar_creador %}
+            <img class="firma-creador__avatar firma-creador__avatar--imagen" src="{{ item.url_avatar_creador }}" alt="Foto de {{ item.nombre_creador }}">
+            {% else %}
+            <span class="firma-creador__avatar">{{ item.inicial_creador }}</span>
+            {% endif %}
+            <span class="firma-creador__texto">{{ item.nombre_creador }}</span>
+            {% if item.url_perfil_creador %}</a>{% endif %}
+          </div>
+          {% endif %}
           <h6>{{ item.titulo }}</h6>
           <p>{{ item.descripcion|default:"Sin descripcion"|truncatewords:16 }}</p>
         </div>
@@ -64,6 +78,16 @@
           {% if item.imagen %}<img src="{{ item.imagen.url }}" alt="{{ item.titulo }}">{% endif %}
         </div>
         <div class="content-card__body">
+          <div class="firma-creador mb-2">
+            <a class="firma-creador__enlace" href="{{ item.url_perfil_autor }}">
+            {% if item.url_avatar_autor %}
+            <img class="firma-creador__avatar firma-creador__avatar--imagen" src="{{ item.url_avatar_autor }}" alt="Foto de perfil de {{ item.autor.username }}">
+            {% else %}
+            <span class="firma-creador__avatar">{{ item.inicial_autor }}</span>
+            {% endif %}
+            <span class="firma-creador__texto">{{ item.autor.username }}</span>
+            </a>
+          </div>
           <h6>{{ item.titulo }}</h6>
           <p>{{ item.descripcion|default:"Sin descripcion"|truncatewords:16 }}</p>
         </div>

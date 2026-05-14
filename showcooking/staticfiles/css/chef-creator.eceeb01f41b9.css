@@ -1,0 +1,306 @@
+.chef-create {
+  padding: 1.5rem 10vw 0;
+}
+
+.chef-create__panel {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.chef-create__panel h2,
+.chef-create__panel h3 {
+  margin-bottom: 0.4rem;
+  color: #2f3439;
+  font-weight: 800;
+}
+
+.chef-form-grid {
+  margin-top: 0.85rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.chef-field label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  color: #5b6574;
+}
+
+.chef-field input,
+.chef-field select,
+.chef-field textarea {
+  width: 100%;
+}
+
+.chef-field--full {
+  grid-column: 1 / -1;
+}
+
+.pasos-editor__source {
+  display: none;
+}
+
+.pasos-editor__ui {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.pasos-editor__atajos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.pasos-editor__lista {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.paso-editor__fila {
+  display: grid;
+  grid-template-columns: auto minmax(150px, 0.8fr) minmax(0, 1.4fr) auto;
+  gap: 0.65rem;
+  align-items: center;
+  padding: 0.75rem;
+  border: 1px solid #e4e9ef;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fbfcfd 0%, #f5f7fa 100%);
+}
+
+.paso-editor__indice {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  padding: 0.5rem 0.65rem;
+  border-radius: 999px;
+  background: #eef2f6;
+  color: #546170;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.paso-editor__input {
+  min-width: 0;
+}
+
+.paso-editor__title {
+  min-width: 0;
+}
+
+.pasos-editor__add {
+  justify-self: start;
+}
+
+.ingredientes-editor {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.ingrediente-editor__fila {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) auto minmax(0, 0.9fr);
+  gap: 0.8rem;
+  padding: 0.8rem;
+  border: 1px solid #e4e9ef;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fbfcfd 0%, #f5f7fa 100%);
+  align-items: start;
+}
+
+.ingrediente-editor__fila label {
+  font-size: 0.82rem;
+  margin-bottom: 0.22rem;
+}
+
+.ingrediente-editor__bloque {
+  min-width: 0;
+}
+
+.ingrediente-editor__ingrediente {
+  min-width: 0;
+}
+
+.ingrediente-editor__ingrediente select {
+  display: none;
+}
+
+.ingrediente-editor__search {
+  margin-bottom: 0.45rem;
+}
+
+.ingrediente-editor__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.45rem;
+}
+
+.ingrediente-chip {
+  border: 1px solid #dbe3ea;
+  background: #fff;
+  color: #4d5b69;
+  border-radius: 999px;
+  padding: 0.22rem 0.6rem;
+  font-size: 0.78rem;
+  line-height: 1.2;
+}
+
+.ingrediente-chip:hover,
+.ingrediente-chip:focus-visible {
+  border-color: #8f6a50;
+  color: #8f6a50;
+}
+
+.ingrediente-chip--new {
+  border-style: dashed;
+}
+
+.ingrediente-editor__cantidad {
+  min-width: 0;
+}
+
+.ingrediente-editor__error {
+  grid-column: 1 / -1;
+}
+
+.ingrediente-editor__acciones {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  align-self: stretch;
+  min-width: 92px;
+}
+
+.ingrediente-editor__acciones .btn {
+  width: 100%;
+  min-height: 42px;
+}
+
+.ingrediente-editor__nuevo {
+  display: none;
+  grid-column: 1 / -1;
+}
+
+.ingrediente-editor__nuevo--visible {
+  display: block;
+}
+
+.ingredientes-editor__footer {
+  margin-top: 0.85rem;
+}
+
+.ingredientes-editor__footer .btn {
+  min-height: 46px;
+}
+
+.chef-list {
+  margin-top: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.chef-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  border: 1px solid #e4e9ef;
+  border-radius: 10px;
+  padding: 0.7rem;
+}
+
+@media (max-width: 900px) {
+  .chef-create {
+    padding: 1rem 5vw 0;
+  }
+
+  .chef-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chef-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .ingrediente-editor__fila {
+    grid-template-columns: 1fr;
+  }
+
+  .paso-editor__fila {
+    grid-template-columns: 1fr;
+  }
+
+  .ingrediente-editor__acciones {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .chef-create {
+    padding: 1rem 1rem 0;
+  }
+
+  .chef-create__panel {
+    padding: 0.95rem;
+    border-radius: 12px;
+  }
+
+  .chef-field input,
+  .chef-field select,
+  .chef-field textarea,
+  .chef-field .form-control {
+    min-height: 48px;
+  }
+
+  .chef-field textarea,
+  .chef-field .form-control[type='file'] {
+    min-height: auto;
+  }
+
+  .chef-field--full.d-flex {
+    flex-direction: column;
+  }
+
+  .pasos-editor__atajos,
+  .ingredientes-editor__footer {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .pasos-editor__atajos .btn,
+  .ingredientes-editor__footer .btn,
+  .paso-editor__remove,
+  .ingrediente-editor__acciones .btn {
+    width: 100%;
+  }
+
+  .paso-editor__indice {
+    min-width: 0;
+    justify-self: start;
+  }
+
+  .ingrediente-editor__fila,
+  .paso-editor__fila {
+    padding: 0.7rem;
+  }
+
+  .ingrediente-chip {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .chef-field--full .btn,
+  .chef-item .btn {
+    width: 100%;
+  }
+}

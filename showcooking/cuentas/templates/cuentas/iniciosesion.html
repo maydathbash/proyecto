@@ -2,44 +2,57 @@
 
 {% block title %}Iniciar sesión {% endblock %}
 
-{% block content %}
+{% load static %}
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <h2 class="mb-4">Iniciar sesión</h2>
-            {% if form.errors %}
-            <div class="alert alert-danger">
-                Usuario o contraseña incorrectos
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/register.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="register-page register-page--auth">
+    <div class="register-shell">
+        <div class="register-card">
+            <div class="register-card__header">
+                <span class="register-badge">Acceso</span>
+                <h2>Iniciar sesion</h2>
             </div>
+            {% if form.errors %}
+                <div class="register-alert" role="alert">
+                    Usuario o contrasena incorrectos.
+                </div>
             {% endif %}
 
-            <form method="post">
+            <form method="post" class="register-form">
                 {% csrf_token %}
-                <div class="mb-3">
-                    <label for="username" class="form-label">Nombre de usuario</label>
-                    <input type="text" class="form-control" id="username" name="username" required>
+                <div class="register-field">
+                    <label for="username" class="register-label">Nombre de usuario</label>
+                    <input type="text" class="form-control" id="username" name="username" required autocomplete="username">
                     {% if form.username.errors %}
-                        <div class="text-danger">
+                        <div class="register-error">
                             {{ form.username.errors }}
                         </div>
                     {% endif %}
                 </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Contraseña</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
+                <div class="register-field">
+                    <label for="password" class="register-label">Contrasena</label>
+                    <input type="password" class="form-control" id="password" name="password" required autocomplete="current-password">
                     {% if form.password.errors %}
-                        <div class="text-danger">
+                        <div class="register-error">
                             {{ form.password.errors }}
                         </div>
                     {% endif %}
                 </div>
-                <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+
+                <div class="register-form__actions">
+                    <button type="submit" class="register-submit">Iniciar sesion</button>
+                    <p class="register-login-link">
+                        ¿No tienes cuenta?
+                        <a href="{% url 'registro_usuario' %}">Crear cuenta</a>
+                    </p>
+                </div>
             </form>
         </div>
     </div>
-</div>
-
-
+</section>
 
 {% endblock %}

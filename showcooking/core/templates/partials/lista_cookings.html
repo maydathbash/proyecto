@@ -27,8 +27,21 @@
       <!-- Contenido -->
       <div class="card-body d-flex flex-column">
 
+        {% if cooking.chef_creador %}
+        <div class="firma-creador mb-2">
+          {% if cooking.url_perfil_creador %}<a class="firma-creador__enlace" href="{{ cooking.url_perfil_creador }}">{% endif %}
+          {% if cooking.url_avatar_creador %}
+          <img class="firma-creador__avatar firma-creador__avatar--imagen" src="{{ cooking.url_avatar_creador }}" alt="Foto de {{ cooking.nombre_creador }}">
+          {% else %}
+          <span class="firma-creador__avatar">{{ cooking.inicial_creador }}</span>
+          {% endif %}
+          <span class="firma-creador__texto">{{ cooking.nombre_creador }}</span>
+          {% if cooking.url_perfil_creador %}</a>{% endif %}
+        </div>
+        {% endif %}
+
         <h6 class="card-title text-capitalize mb-1">
-          {{ cooking.titulo }}
+          <a href="{% url 'detalle_showcooking' cooking.id %}" class="text-reset text-decoration-none">{{ cooking.titulo }}</a>
         </h6>
 
         <small class="text-muted mb-2">

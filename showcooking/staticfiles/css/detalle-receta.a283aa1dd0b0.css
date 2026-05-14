@@ -1,0 +1,463 @@
+.detalle-receta {
+  padding: 1.7rem 12vw 0;
+}
+
+.detalle-receta__hero {
+  position: relative;
+  min-height: 390px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.2);
+  background: #1f2328;
+}
+
+.hero-imagen {
+  width: 100%;
+  height: 390px;
+  object-fit: cover;
+  filter: brightness(0.82);
+}
+
+.hero-capa {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.4rem;
+  color: #fff;
+  background: linear-gradient(180deg, rgba(16, 18, 20, 0.15) 0%, rgba(16, 18, 20, 0.8) 100%);
+}
+
+.hero-capa h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.hero-capa p {
+  margin-top: 0.45rem;
+}
+
+.hero-metas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.85rem;
+}
+
+.meta-pill {
+  background: rgba(255, 255, 255, 0.17);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 999px;
+  padding: 0.28rem 0.68rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.meta-pill__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.meta-pill__link:hover,
+.meta-pill__link:focus-visible {
+  text-decoration: underline;
+}
+
+.detalle-receta__contenido {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.detalle-card {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+  padding: 1rem;
+}
+
+.detalle-card h2,
+.detalle-card h3 {
+  color: #2f3439;
+  font-weight: 700;
+  margin-bottom: 0.65rem;
+}
+
+.detalle-card p {
+  color: #657080;
+}
+
+.detalle-card--resumen {
+  align-self: start;
+}
+
+.descripcion-bloque {
+  padding: 1rem 1.05rem;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #fffdf9 0%, #f9f4ed 100%);
+  border: 1px solid #efe2d3;
+}
+
+.descripcion-bloque__eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  color: #9a7658 !important;
+  font-weight: 700;
+}
+
+.descripcion-bloque__texto {
+  padding-top: 0.2rem;
+}
+
+.descripcion-bloque__texto p {
+  margin: 0;
+  color: #576476;
+  line-height: 1.85;
+  font-size: 1rem;
+}
+
+.texto-instrucciones {
+  line-height: 1.7;
+}
+
+.texto-instrucciones--pasos {
+  margin: 0;
+  padding-left: 1.35rem;
+}
+
+.texto-instrucciones--pasos li {
+  margin-bottom: 0.75rem;
+  color: #657080;
+}
+
+.texto-instrucciones--pasos li::marker {
+  color: #8f6a50;
+  font-weight: 700;
+}
+
+.autor-bloque {
+  margin: 0.95rem 0 0.25rem;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid rgba(228, 233, 239, 0.8);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: rgba(255, 248, 241, 0.42);
+}
+
+.autor-bloque__avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #778492;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.autor-bloque__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.autor-bloque__perfil {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.autor-bloque__contenido h3 {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.2;
+}
+
+.autor-bloque__nombre {
+  color: inherit;
+  text-decoration: none;
+}
+
+.autor-bloque__nombre:hover,
+.autor-bloque__nombre:focus-visible {
+  text-decoration: underline;
+}
+
+.autor-bloque__eyebrow {
+  margin: 0 0 0.05rem;
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08rem;
+  color: #9a7658 !important;
+  font-weight: 600;
+}
+
+.autor-bloque__texto {
+  margin: 0;
+  color: #768392 !important;
+  font-size: 0.78rem;
+}
+
+.autor-bloque__link {
+  display: inline-block;
+  margin-top: 0.18rem;
+  color: #8f6a50;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.autor-bloque__link:hover {
+  text-decoration: underline;
+}
+
+.valoracion {
+  color: #f0ad4e;
+  font-weight: 700;
+}
+
+.valoracion-estrellas {
+  letter-spacing: 0.08rem;
+  font-size: 1.15rem;
+}
+
+.resumen-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.resumen-item {
+  padding: 0.8rem 0.85rem;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fbfcfd 0%, #f2f5f8 100%);
+  border: 1px solid #e3e9ef;
+}
+
+.resumen-item--destacado {
+  grid-column: span 2;
+  background: linear-gradient(135deg, #fff4db 0%, #ffe8b5 100%);
+  border-color: #f2d27a;
+}
+
+.resumen-item--full {
+  grid-column: span 2;
+}
+
+.resumen-item__label {
+  display: block;
+  margin-bottom: 0.22rem;
+  font-size: 0.74rem;
+  letter-spacing: 0.05rem;
+  text-transform: uppercase;
+  color: #7a8592;
+  font-weight: 700;
+}
+
+.resumen-item__value {
+  color: #26313d;
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.resumen-item__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.resumen-item__link:hover,
+.resumen-item__link:focus-visible {
+  text-decoration: underline;
+}
+
+.accion-favorito-form {
+  margin: 0;
+}
+
+.accion-favorito {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.62rem 0.9rem;
+  border: 1px solid #d9dfe7;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f7fbff 0%, #e9f2ff 100%);
+  color: #28507b;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.accion-favorito:hover,
+.accion-favorito:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(55, 97, 153, 0.15);
+}
+
+.accion-favorito__icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.accion-favorito--activo {
+  border-color: #84b15a;
+  background: linear-gradient(135deg, #f3ffe8 0%, #ddf4c1 100%);
+  color: #3d6e17;
+}
+
+.accion-favorito--guardado {
+  border-color: #bfd0e7;
+}
+
+.accion-favorito--bloqueado {
+  opacity: 0.92;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.8rem;
+}
+
+.detalle-receta__interacciones {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.interaccion-subtitulo {
+  color: #6b7785;
+  margin-bottom: 0.6rem;
+  font-size: 0.95rem;
+}
+
+.star-rating {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  gap: 0.15rem;
+}
+
+.star-rating input {
+  display: none;
+}
+
+.star-rating label {
+  font-size: 2rem;
+  line-height: 1;
+  color: #d9e0e8;
+  cursor: pointer;
+  transition: transform 0.18s ease, color 0.18s ease;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+  color: #f4b93d;
+}
+
+.star-rating label:active {
+  transform: scale(0.95);
+}
+
+.form-interaccion textarea,
+.form-interaccion select {
+  width: 100%;
+  border: 1px solid #d6dee8;
+  border-radius: 8px;
+  padding: 0.5rem 0.65rem;
+}
+
+.lista-interacciones {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.item-interaccion {
+  border: 1px solid #e3e8ee;
+  border-radius: 10px;
+  padding: 0.75rem;
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbfd 100%);
+}
+
+.item-interaccion p {
+  margin: 0;
+}
+
+.item-interaccion__head {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.25rem;
+}
+
+.item-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #fff;
+  background: #4a5968;
+}
+
+.item-avatar--image {
+  object-fit: cover;
+  background: transparent;
+}
+
+.item-avatar-link {
+  display: inline-flex;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.item-interaccion__meta {
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.item-interaccion__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.item-interaccion__link:hover,
+.item-interaccion__link:focus-visible {
+  text-decoration: underline;
+}
+
+.linea-estrellas {
+  letter-spacing: 0.03rem;
+  color: #f4b93d;
+  font-weight: 700;
+  margin-bottom: 0.35rem !important;
+  font-size: 1.1rem;
+}
+
+.linea-estrellas span {
+  letter-spacing: normal;
+  color: #607081;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.item-opinion {
+  color: #4f5f6f !important;
+  line-height: 1.55;
+}

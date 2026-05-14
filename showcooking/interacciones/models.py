@@ -25,6 +25,7 @@ class ValoracionShowcooking(models.Model):
     
     comentario = models.TextField(blank=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
+    oculto = models.BooleanField(default=False)
     
     class Meta:
         unique_together = ['usuario', 'showcooking']  # 1 valoración por usuario
@@ -55,7 +56,7 @@ class ValoracionReceta(models.Model):
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
     comentario = models.TextField(blank=True)
-    
+    oculto = models.BooleanField(default=False)
     
     class Meta:
         unique_together = ['usuario', 'receta']  # 1 valoración por usuario
