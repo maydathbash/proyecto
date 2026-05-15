@@ -1,1 +1,0 @@
-# The file /showcooking/showcooking/cuentas/__init__.py is intentionally left blank.
